@@ -87,12 +87,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="类的构造Java中类的构造- 构造函数 构造方法生成类的实例，是最基本的方法。 当构造器参数较多时 ： a: 提供默认的参数，防止用户输入的数据不对,造成对象生成的不完整 提供多个构造器,每一个都在前一个构造器的基础上减少一个默认参数值。   b：使用构造器来传入参数,强制用户完整输入(或者构造器填入默认参数)来确保对象相关的属性的完整性 类的内部提供一个静态的 Builder 类,用来逐个设置相">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="effective-java笔记">
+<meta property="og:url" content="http://yoursite.com/2017/04/18/effective-java学习笔记/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="类的构造Java中类的构造- 构造函数 构造方法生成类的实例，是最基本的方法。 当构造器参数较多时 ： a: 提供默认的参数，防止用户输入的数据不对,造成对象生成的不完整 提供多个构造器,每一个都在前一个构造器的基础上减少一个默认参数值。   b：使用构造器来传入参数,强制用户完整输入(或者构造器填入默认参数)来确保对象相关的属性的完整性 类的内部提供一个静态的 Builder 类,用来逐个设置相">
+<meta property="og:updated_time" content="2017-04-19T17:34:07.882Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="effective-java笔记">
+<meta name="twitter:description" content="类的构造Java中类的构造- 构造函数 构造方法生成类的实例，是最基本的方法。 当构造器参数较多时 ： a: 提供默认的参数，防止用户输入的数据不对,造成对象生成的不完整 提供多个构造器,每一个都在前一个构造器的基础上减少一个默认参数值。   b：使用构造器来传入参数,强制用户完整输入(或者构造器填入默认参数)来确保对象相关的属性的完整性 类的内部提供一个静态的 Builder 类,用来逐个设置相">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/04/18/effective-java学习笔记/"/>
 
 
 
 
 
-  <title> Hexo </title>
+  <title> effective-java笔记 | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -151,9 +156,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -236,9 +239,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -268,10 +271,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2017/04/18/effective-java学习笔记/" itemprop="url">
-                  effective-java笔记
-                </a>
+                effective-java笔记
               
             
           </h1>
@@ -322,9 +322,7 @@
       
 
       
-        
-          
-            <h2 id="类的构造"><a href="#类的构造" class="headerlink" title="类的构造"></a>类的构造</h2><h3 id="Java中类的构造"><a href="#Java中类的构造" class="headerlink" title="Java中类的构造"></a>Java中类的构造</h3><h4 id="构造函数"><a href="#构造函数" class="headerlink" title="- 构造函数"></a>- 构造函数</h4><ul>
+        <h2 id="类的构造"><a href="#类的构造" class="headerlink" title="类的构造"></a>类的构造</h2><h3 id="Java中类的构造"><a href="#Java中类的构造" class="headerlink" title="Java中类的构造"></a>Java中类的构造</h3><h4 id="构造函数"><a href="#构造函数" class="headerlink" title="- 构造函数"></a>- 构造函数</h4><ul>
 <li>构造方法生成类的实例，是最基本的方法。</li>
 <li>当构造器参数较多时 ：<ul>
 <li>a: 提供默认的参数，防止用户输入的数据不对,造成对象生成的不完整<ul>
@@ -399,20 +397,27 @@
 </li>
 </ul>
 <h2 id="todo-范型"><a href="#todo-范型" class="headerlink" title="todo:范型"></a>todo:范型</h2>
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
@@ -420,281 +425,38 @@
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/16/GitHub的使用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
         
-        
-          <h1 class="post-title" itemprop="name headline">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-              
-                
-                <a class="post-title-link" href="/2017/04/16/GitHub的使用/" itemprop="url">
-                  GitHub的使用
-                </a>
-              
+              <a href="/2017/04/16/GitHub的使用/" rel="prev" title="GitHub的使用">
+                GitHub的使用 <i class="fa fa-chevron-right"></i>
+              </a>
             
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T16:39:34+08:00">
-                2017-04-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h2 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h2><p>ssh(Secure Shell)协议主要用于互联网上计算机的远程登录，为计算机的 Shell(壳层,主要与OS的内核通讯) 层，提供安全的数据传输和使用环境。</p>
-<h4 id="安全性如何保证"><a href="#安全性如何保证" class="headerlink" title="安全性如何保证"></a>安全性如何保证</h4><ul>
-<li><h5 id="基于密码的安全验证"><a href="#基于密码的安全验证" class="headerlink" title="基于密码的安全验证"></a>基于密码的安全验证</h5><p>用户请求登录远程主机时,主机将自己的公钥发送给用户，用户的传输数据使用远程主机的公钥进行加密，只有远程主机的私钥才能解密，以此来实现数据的传输安全。</p>
-<h6 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h6><p>基于密码的验证，当网络上有人截获你的登录请求时,冒充远程主机，发送伪造的公钥给你，(不同于 https，使用的公钥是由与证书中心 CA 公证的)使用伪造的公钥加密通讯数据后,那么会截获并解析你的传输数据,再用截获的登录密码登录远程主机。</p>
-</li>
-<li><h5 id="基于密钥的安全验证"><a href="#基于密钥的安全验证" class="headerlink" title="基于密钥的安全验证"></a>基于密钥的安全验证</h5><p>既然没有证书中心 CA 确认的公钥，那么我们自己可以在我们的范围内确认某一个公钥(某个实体的身份)的正确性，那就是我们自己生成一对私钥和公钥，通过将自己生成公钥放在远程服务器端。用户请求登录过程中,远程主机为了确认用户的身份，发送一段随机的字符串,让用户用私钥加密后，回传给远程服务端,远程服务端用事先用户存储的公钥进行解密,如果成功了，就证明用户是可信的,直接允许进行登录，而不用输入密码。</p>
-<h6 id="基于密钥的安全登录，不用输入登录名和密码-那么登录时，我们是以那个身份登录的呢？"><a href="#基于密钥的安全登录，不用输入登录名和密码-那么登录时，我们是以那个身份登录的呢？" class="headerlink" title="基于密钥的安全登录，不用输入登录名和密码,那么登录时，我们是以那个身份登录的呢？"></a>基于密钥的安全登录，不用输入登录名和密码,那么登录时，我们是以那个身份登录的呢？</h6><p>生成私钥和公钥的时候，会自动将我的的身份带入进去。ssh-keygen -C “yourName@hostname.com”,如果不设置，默认就是以当前的身份生成该私钥和公钥，公钥文件的最后会有这个用户身份。注意确认唯一的身份<br>是 yourName + hostname，不要将 -C 后面的内容想象成电子邮件(email),那是你身份的标识，即:hostname 上的 yourName 用户。</p>
-</li>
-<li><h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>由于使用 ssh 协议传输的过程中,没有一个统一的公钥证书中心(CA) 来标识网络上的某个实体的身份,我们唯一能确认的就是我们自己生成的公钥,基于密钥的安全验证，实际上是由我们来验证服务端(放置了可信的公钥的实体)，而基于密码的验证方式远程服务端来验证我们,我们的登录请求可能会发往网络上的任何一台计算机,所以可能导致了冒牌远程服务端的出现(不进行任何的验证，只是希望得到我们的登录请求)。</p>
-</li>
-</ul>
-<h4 id="密钥与公钥"><a href="#密钥与公钥" class="headerlink" title="密钥与公钥"></a>密钥与公钥</h4><h2 id="github的验证"><a href="#github的验证" class="headerlink" title="github的验证"></a>github的验证</h2>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/16/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/16/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T00:35:49+08:00">
-                2017-04-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -702,6 +464,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -721,8 +487,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -766,6 +541,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的构造"><span class="nav-number">1.</span> <span class="nav-text">类的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中类的构造"><span class="nav-number">1.1.</span> <span class="nav-text">Java中类的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造函数"><span class="nav-number">1.1.1.</span> <span class="nav-text">- 构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态工厂方法-工厂方法"><span class="nav-number">1.1.2.</span> <span class="nav-text">- 静态工厂方法/工厂方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么需要一个-Provider-类-（item-01）"><span class="nav-number">1.1.3.</span> <span class="nav-text">为什么需要一个 Provider 类?（item_01）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例的生成"><span class="nav-number">1.1.4.</span> <span class="nav-text">单例的生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#避免无意义的类的构造"><span class="nav-number">1.1.5.</span> <span class="nav-text">避免无意义的类的构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类中通用的方法"><span class="nav-number">2.</span> <span class="nav-text">类中通用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todo-范型"><span class="nav-number">3.</span> <span class="nav-text">todo:范型</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -875,6 +666,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
