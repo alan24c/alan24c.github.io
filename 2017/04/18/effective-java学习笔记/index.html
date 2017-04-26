@@ -94,7 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/04/18/effective-java学习笔记/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="类的构造Java中类的构造- 构造函数 构造方法生成类的实例，是最基本的方法。 当构造器参数较多时 ： a: 提供默认的参数，防止用户输入的数据不对,造成对象生成的不完整 提供多个构造器,每一个都在前一个构造器的基础上减少一个默认参数值。   b：使用构造器来传入参数,强制用户完整输入(或者构造器填入默认参数)来确保对象相关的属性的完整性 类的内部提供一个静态的 Builder 类,用来逐个设置相">
-<meta property="og:updated_time" content="2017-04-19T17:34:07.882Z">
+<meta property="og:updated_time" content="2017-04-23T09:49:42.406Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="effective-java笔记">
 <meta name="twitter:description" content="类的构造Java中类的构造- 构造函数 构造方法生成类的实例，是最基本的方法。 当构造器参数较多时 ： a: 提供默认的参数，防止用户输入的数据不对,造成对象生成的不完整 提供多个构造器,每一个都在前一个构造器的基础上减少一个默认参数值。   b：使用构造器来传入参数,强制用户完整输入(或者构造器填入默认参数)来确保对象相关的属性的完整性 类的内部提供一个静态的 Builder 类,用来逐个设置相">
@@ -197,7 +197,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -207,7 +207,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -284,7 +284,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-18T00:54:19+08:00">
                 2017-04-18
@@ -396,7 +396,60 @@
 </ul>
 </li>
 </ul>
-<h2 id="todo-范型"><a href="#todo-范型" class="headerlink" title="todo:范型"></a>todo:范型</h2>
+<h2 id="范型"><a href="#范型" class="headerlink" title="范型"></a>范型</h2><ul>
+<li>原生范型与范型特化<ul>
+<li>范型在程序运行时,是被擦除的,任何范型都被擦除成了 Object 类型</li>
+<li>使用原生范型时(eg:set,list 等等),会跳过编译时的类型检查,在代码运行期间容易产生类型转换(cast)的异常</li>
+<li>使用参数化后的范型(eg:List<string>)，代码编译时,由类型检查,类型转换不兼容的异常会在编译器期间抛出来,而非在运行时才发现</string></li>
+</ul>
+</li>
+<li>无限制通配符与有限类型通配符  <ul>
+<li>使用通配符类型时,表明你不关心或者不知道程序具体的类型信息,而专注于一个通用的代码逻辑</li>
+<li>无限类型通配符，想较于原生类型,其仍然有类型安全的特性，因为除了 null,不能将任何元素放入到集合类型中<ul>
+<li>使用无限类型通配符时,一般是用来比较元素是否为 null.因为使用了 ? 后，只能往里面写入 null 对象了。</li>
+</ul>
+</li>
+<li>todo:无限类型通配符的引入原因  </li>
+<li>todo:有限类型通配符</li>
+</ul>
+</li>
+</ul>
+<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><ul>
+<li>枚举是一个特殊的 class，能够由自己的方法,自己的作用域</li>
+<li>枚举与普通类的区别<ul>
+<li>枚举的实例对象，不能在枚举类外,通过构造函数生成,必须在枚举类中定义生成</li>
+<li>枚举的实例对象的个数,是可控的,因为在枚举类的里面,控制了实例对象的生成</li>
+<li>枚举值(实例,对象)的名称，即实例(对象)通过构造函数生成时的，自定义的名称(字符串),同时也是在程序中通过枚举类直接引用的那个名称(eg:Color.RED，这个枚举对象的名称就是RED)</li>
+</ul>
+</li>
+<li>枚举的方法<ul>
+<li>values():返回枚举类的所有实例(对象)</li>
+<li>EnumSet.of():返回一个枚举值的集合</li>
+</ul>
+</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ul>
+<li>必要性的保护<ul>
+<li>保护性拷贝,防止出现类中属性的引用被利用<ul>
+<li>get()方法：不要将类中的属性的引用暴露出来,提供给外部的只能是属性的值(value)</li>
+<li>set()方法: 设置的只能是属性的值(value)，而不能直接将外部的引用设置到类的属性中去</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>方法重载与覆盖(@Override)<ul>
+<li>重载方法是在编译时,由编译器基于编译参数而决定的</li>
+<li>重载方法是函数名相同,参数不同</li>
+<li>方法覆盖是在运行时决定的</li>
+<li>方法覆盖函数名相同,参数不同</li>
+</ul>
+</li>
+</ul>
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><ul>
+<li>序列化是将一个对象编码成字节流，在不同的计算机上进行传输,能够实现跨语言之间的对象交流(反序列化)</li>
+<li>为继承而设计的类尽量不要实现 Serializable 接口<br>-</li>
+</ul>
+
       
     </div>
 
@@ -431,6 +484,10 @@
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/24/Java并发编程实战/" rel="next" title="Java并发编程实战">
+                <i class="fa fa-chevron-left"></i> Java并发编程实战
+              </a>
             
           </div>
 
@@ -489,10 +546,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -512,8 +569,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">3</span>
-                <span class="site-state-item-name">Artikel</span>
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -551,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的构造"><span class="nav-number">1.</span> <span class="nav-text">类的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中类的构造"><span class="nav-number">1.1.</span> <span class="nav-text">Java中类的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造函数"><span class="nav-number">1.1.1.</span> <span class="nav-text">- 构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态工厂方法-工厂方法"><span class="nav-number">1.1.2.</span> <span class="nav-text">- 静态工厂方法/工厂方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么需要一个-Provider-类-（item-01）"><span class="nav-number">1.1.3.</span> <span class="nav-text">为什么需要一个 Provider 类?（item_01）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例的生成"><span class="nav-number">1.1.4.</span> <span class="nav-text">单例的生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#避免无意义的类的构造"><span class="nav-number">1.1.5.</span> <span class="nav-text">避免无意义的类的构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类中通用的方法"><span class="nav-number">2.</span> <span class="nav-text">类中通用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todo-范型"><span class="nav-number">3.</span> <span class="nav-text">todo:范型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的构造"><span class="nav-number">1.</span> <span class="nav-text">类的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中类的构造"><span class="nav-number">1.1.</span> <span class="nav-text">Java中类的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造函数"><span class="nav-number">1.1.1.</span> <span class="nav-text">- 构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态工厂方法-工厂方法"><span class="nav-number">1.1.2.</span> <span class="nav-text">- 静态工厂方法/工厂方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么需要一个-Provider-类-（item-01）"><span class="nav-number">1.1.3.</span> <span class="nav-text">为什么需要一个 Provider 类?（item_01）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例的生成"><span class="nav-number">1.1.4.</span> <span class="nav-text">单例的生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#避免无意义的类的构造"><span class="nav-number">1.1.5.</span> <span class="nav-text">避免无意义的类的构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类中通用的方法"><span class="nav-number">2.</span> <span class="nav-text">类中通用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#范型"><span class="nav-number">3.</span> <span class="nav-text">范型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#枚举"><span class="nav-number">4.</span> <span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">5.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化"><span class="nav-number">6.</span> <span class="nav-text">序列化</span></a></li></ol></div>
             
 
           </div>
@@ -583,7 +640,7 @@
 
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

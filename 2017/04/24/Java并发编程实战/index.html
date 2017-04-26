@@ -1,0 +1,881 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="并发条件下的线程安全 竞态条件  定义：多个线程执行顺序不同时,而得到不同的结果 最常见的是延迟初始化，先检查再初始化对象 以及 ++value 操作 a:从内存中读取 value 的值 b:在 cpu 中进行 value 的值加1 c:从 cpu 中往内存中更新 value 的值     竞态条件,是由于多线程环境环境下,共享的某些逻辑块,因为不是原子操作,而在单个线程中会出现状态的不同,进而影">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程实战">
+<meta property="og:url" content="http://yoursite.com/2017/04/24/Java并发编程实战/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="并发条件下的线程安全 竞态条件  定义：多个线程执行顺序不同时,而得到不同的结果 最常见的是延迟初始化，先检查再初始化对象 以及 ++value 操作 a:从内存中读取 value 的值 b:在 cpu 中进行 value 的值加1 c:从 cpu 中往内存中更新 value 的值     竞态条件,是由于多线程环境环境下,共享的某些逻辑块,因为不是原子操作,而在单个线程中会出现状态的不同,进而影">
+<meta property="og:updated_time" content="2017-04-25T17:39:23.936Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发编程实战">
+<meta name="twitter:description" content="并发条件下的线程安全 竞态条件  定义：多个线程执行顺序不同时,而得到不同的结果 最常见的是延迟初始化，先检查再初始化对象 以及 ++value 操作 a:从内存中读取 value 的值 b:在 cpu 中进行 value 的值加1 c:从 cpu 中往内存中更新 value 的值     竞态条件,是由于多线程环境环境下,共享的某些逻辑块,因为不是原子操作,而在单个线程中会出现状态的不同,进而影">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/24/Java并发编程实战/"/>
+
+
+
+
+
+  <title> Java并发编程实战 | Hexo </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/24/Java并发编程实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java并发编程实战
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-24T00:00:05+08:00">
+                2017-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="并发条件下的线程安全"><a href="#并发条件下的线程安全" class="headerlink" title="并发条件下的线程安全"></a>并发条件下的线程安全</h3><ul>
+<li><p>竞态条件</p>
+<ul>
+<li>定义：多个线程执行顺序不同时,而得到不同的结果<ul>
+<li>最常见的是延迟初始化，先检查再初始化对象</li>
+<li>以及 ++value 操作<ul>
+<li>a:从内存中读取 value 的值</li>
+<li>b:在 cpu 中进行 value 的值加1</li>
+<li>c:从 cpu 中往内存中更新 value 的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>竞态条件,是由于多线程环境环境下,共享的某些逻辑块,因为不是原子操作,而在单个线程中会出现状态的不同,进而影响了整个结果</li>
+</ul>
+</li>
+<li><p>复合操作</p>
+<ul>
+<li>解决竟态条件,是把共享的逻辑,变成原子操作,使得这些逻辑执行过程中不会被多线程的调度机制打断,只会在某一个线程中完整的执行完整</li>
+<li>复合操作：多个原子操作组合的情况下,仍然不能保证线程安全性,多个原子操作过程中,仍然有竞态条件：最终结果仍然依赖于各个原子操作的配合.</li>
+</ul>
+</li>
+<li><p>多线程安全</p>
+<ul>
+<li>保护竟态条件下,多个连续的逻辑,以原子(不可再分割)的方式执行，一旦逻辑开始,就会执行结束,中间不会被线程调度机制打断,更加没有 context(上下文)</li>
+</ul>
+</li>
+<li><p>原子性的支持</p>
+<ul>
+<li>代码块同步 Synchronized (用锁来保护状态)<ul>
+<li>内置锁/监视器锁</li>
+<li>同步代码块的两个部分<ul>
+<li>锁对象的引用</li>
+<li>被 Synchronized 保护的代码块</li>
+</ul>
+</li>
+<li>同步方法<ul>
+<li>只要在方法名前加上 Synchronized 就可以</li>
+</ul>
+</li>
+<li>可重入：保证了子类的方法可以调用父类的方法,而不会产生死锁<ul>
+<li>每个锁关联了使用线程和计数器</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="共享对象"><a href="#共享对象" class="headerlink" title="共享对象"></a>共享对象</h3><ul>
+<li>对象的可见性<ul>
+<li>重排序<ul>
+<li>没有进行同步的情况下,编译器和处理器在编译和运行时,可以对执行的顺序进行调整，以适应 cpu 的多级流水操作(乱序执行)</li>
+</ul>
+</li>
+<li>失效数据<ul>
+<li>没有同步的情况下,共享变量并发读和写时,某一时刻,读到数据可能是旧的数据,此时新的值在 cpu 寄存器中,还没有来的及写回内存中去。</li>
+<li>同步原语会保证,用户设置的 new value 被写回内存中时,不会让另外的线程读操作</li>
+</ul>
+</li>
+<li>非原子的 64 位操作<ul>
+<li>long 和 double 类型的 64 位数据,读和写可能被分成两个 32 bit 的操作,这样并发的读写时,会出现读到某个值的32 bit和另外一个值的低32 bit</li>
+<li>使用 volatile 或者 lock 来同步操作</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可见性与锁及 volatile 变量<ul>
+<li>对于同一个锁,某个线程获取后,可以完整看到上一个获取到同一个锁的线程的所有操作结果,这就是变量的可见性.这是因为上一个获取锁的线程,实现了所有的同步操作,释放锁后,该锁才能被当前线程获取</li>
+<li>volatile 变量<ul>
+<li>访问(get) volatile 变量时,不会加锁,即不会阻塞线程</li>
+<li>写入 volatile 变量相当于退出同步块,读取时,相当于进入同步块</li>
+<li>volatile 变量的可见性,是当 volatile 变量写入时,cpu 会强制更新内存中的值,而非 cache 中的值。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="对象的发布与逃逸"><a href="#对象的发布与逃逸" class="headerlink" title="对象的发布与逃逸"></a>对象的发布与逃逸</h3><ul>
+<li>对象的发布<ul>
+<li>使得对象在当前代码作用域外也能够被使用<ul>
+<li>发布对象的引用</li>
+<li>发布对象的内部状态</li>
+<li>隐式发布 this 引用<ul>
+<li>使用内部类时，(构造函数中开辟一个新线程时,这种情况也是属于内部类)内部类可以隐式引用外部类的 this 引用， 当外部类的构造函数还是运行时，通过内部类的 this 引用会指向一个没有构造完成的外部类.</li>
+<li>使用工厂方法,将外部类的构造方法进行 private 保护,只能通过工厂方法获取类的实例,这样在工厂方法中,可以保证外部类的正确构造完成</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程封闭<ul>
+<li>将数据的作用域范围封闭在单个线程中,这样退化到了单线程的模型了</li>
+<li>volatile 线程封闭<ul>
+<li>将 volatile 的 write 操作封闭在某个线程中,防止竞态的产生</li>
+<li>volatile 的多线程并发 read,始终能够读到最新的值</li>
+</ul>
+</li>
+<li>栈封闭<ul>
+<li>使用基本类型的局部变量,能够保证任何方法都无法获取其引用</li>
+</ul>
+</li>
+<li>ThreadLocal 类<ul>
+<li>ThreadLocal 类将发生竞态的共享变量复制一份，保存到本地线程中,实现线程封闭</li>
+<li>相对于锁,ThreadLocal 是一种典型的用空间换时间的策略</li>
+<li><h2 id="todo-ThreadLocal-的适用场景"><a href="#todo-ThreadLocal-的适用场景" class="headerlink" title="todo:ThreadLocal 的适用场景"></a>todo:ThreadLocal 的适用场景</h2></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="对象的组合"><a href="#对象的组合" class="headerlink" title="对象的组合"></a>对象的组合</h3><ul>
+<li>目的:实现线程安全的类</li>
+<li>收集依赖的状态<ul>
+<li>各种对象之间的组合,造成了对象状态的增加,线程安全的组合,需要整体上状态的的一致性</li>
+<li>线程安全：保证各个状态的同步策略</li>
+</ul>
+</li>
+<li>实例封闭<ul>
+<li>Java监视器模式<ul>
+<li>Java 虚拟机中,每个 Object 或者 Class 都通过相应的逻辑关联到一个监视器上<ul>
+<li>可以通过 Synchronized 关联到对象的监视器上</li>
+</ul>
+</li>
+<li>使用 Class 中的内置私有的锁对象(监视器)来实现同步<ul>
+<li>相对于其它通过共有方式能够访问的锁对象,无需参与到其它代码作用域的同步策略中去</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程安全委托<ul>
+<li>对象之间的状态的同步,可以一些线程安全的状态来替换<ul>
+<li>普通集合 -&gt; 线程安全的集合</li>
+<li>普通变量 -&gt; 不可变的变量(final)<ul>
+<li>可以任意发布不可变变量</li>
+</ul>
+</li>
+<li>发布变量的引用 -&gt; 发布变量的视图<ul>
+<li>不希望外部线程来改变该变量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>委托失效<ul>
+<li>单个变量虽然是线程安全,但是单个线程安全的变量组合成的对象,不一定是线程安全的</li>
+</ul>
+</li>
+<li><h2 id="todo：构造函数捕获模式"><a href="#todo：构造函数捕获模式" class="headerlink" title="todo：构造函数捕获模式"></a>todo：构造函数捕获模式</h2></li>
+</ul>
+</li>
+</ul>
+<h3 id="同步容器类"><a href="#同步容器类" class="headerlink" title="同步容器类"></a>同步容器类</h3><ul>
+<li>状态封装,共有方法使用 Synchronized 同步，一次只允许单个线程串行访问<ul>
+<li>Vector</li>
+<li>Hashtable<ul>
+<li>线程安全,不代表使用的时候就安全,单个方法进行了同步,但是单个安全的方法组合过程中会变得不安全</li>
+<li>单个安全的方法组合成一个逻辑,通过 Java 监视器模式,将整个逻辑变成一个原子超做，实现同步</li>
+<li>同步容器类是支持客户端加锁的。(使用同步容器类的监视器)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>迭代器和ConcurrentModificationException<ul>
+<li>及时失败的策略</li>
+<li>hasNext（）/next() 抛出 ConcurrentModificationException 异常<ul>
+<li>注意隐式的迭代器<ul>
+<li>toString()</li>
+<li>hashCode()</li>
+<li>equal()</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="并发容器类"><a href="#并发容器类" class="headerlink" title="并发容器类"></a>并发容器类</h3><ul>
+<li><p>多个线程并发访问</p>
+<ul>
+<li>ConcurrentHashMap<ul>
+<li>使用分段锁(Lock Striping)</li>
+<li>迭代器具有弱一致性(Weak Consistent)，并非即使失效</li>
+<li>size(),isEmpty()返回的计算结果可能是一个过期的值</li>
+<li>不能通过加锁来独占,一些需要原子操作的逻辑已经通过内置的方法提供<ul>
+<li>putIfAbsent()</li>
+<li>removeIfEqual()</li>
+<li>remove()</li>
+<li>replace()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CopyOnWriteArrayList</li>
+<li>写时复制<ul>
+<li>迭代器指向的底层的一个不可变数组</li>
+<li>读(迭代)和写(修改)线程相互不干扰</li>
+<li>当前迭代器返回的元素,不会变,不会收到写(修改)线程的干扰</li>
+</ul>
+</li>
+<li><p>ConcurrentLinkedQueue</p>
+</li>
+<li><p>BlocingQueue</p>
+</li>
+<li><p>阻塞队列</p>
+<ul>
+<li>读取时,空则阻塞</li>
+<li>写入时,满则阻塞<ul>
+<li>LinkedBlockingQueue</li>
+<li>ArrayBlockingQueue</li>
+<li>PriorityBlockingQueue</li>
+<li><h2 id="todo-SynchronousQueue"><a href="#todo-SynchronousQueue" class="headerlink" title="todo SynchronousQueue"></a>todo SynchronousQueue</h2></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>BlockingDeque</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="同步工具类"><a href="#同步工具类" class="headerlink" title="同步工具类"></a>同步工具类</h3><p> -</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/18/effective-java学习笔记/" rel="prev" title="effective-java笔记">
+                effective-java笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发条件下的线程安全"><span class="nav-number">1.</span> <span class="nav-text">并发条件下的线程安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享对象"><span class="nav-number">2.</span> <span class="nav-text">共享对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的发布与逃逸"><span class="nav-number">3.</span> <span class="nav-text">对象的发布与逃逸</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todo-ThreadLocal-的适用场景"><span class="nav-number"></span> <span class="nav-text">todo:ThreadLocal 的适用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的组合"><span class="nav-number">1.</span> <span class="nav-text">对象的组合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todo：构造函数捕获模式"><span class="nav-number"></span> <span class="nav-text">todo：构造函数捕获模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步容器类"><span class="nav-number">1.</span> <span class="nav-text">同步容器类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发容器类"><span class="nav-number">2.</span> <span class="nav-text">并发容器类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todo-SynchronousQueue"><span class="nav-number"></span> <span class="nav-text">todo SynchronousQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步工具类"><span class="nav-number">1.</span> <span class="nav-text">同步工具类</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
