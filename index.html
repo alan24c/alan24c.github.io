@@ -247,6 +247,174 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Java中的反射/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/13/Java中的反射/" itemprop="url">
+                  Java中的反射
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-13T17:21:19+08:00">
+                2017-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="Java反射的基础-Class对象"><a href="#Java反射的基础-Class对象" class="headerlink" title="Java反射的基础 : Class对象"></a>Java反射的基础 : Class对象</h5><ul>
+<li>Java 虚拟机编译时候会创建 class 文件,包含了类的所有信息<ul>
+<li>Class.forName(“nameOfClass”) 加载 class 文件,返回一个 Class 对象    <ul>
+<li>Object instanceof “nameOfClass” 和 class.isInstance(Object)的区别<ul>
+<li>两者动态等价,都是判断运行中的某个对象是否是指定 Class 的实例,语义是:你(Object)是这个类还是从这个类(Class)派生出去的      </li>
+<li>两者的区别  <ul>
+<li>instanceof 关键字</li>
+<li>isInstance() Class 对象的方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Class 对象的 equale 和 ==<ul>
+<li>equal 和 == 动态等价</li>
+</ul>
+</li>
+<li>equale/== 和 instanceof/isInstance() 的区别<ul>
+<li>equale/== 意义一样,instanceof/isInstance() 意义一样</li>
+<li>equale/== 实际比较的是 class 的对象,不牵涉到继承的问题</li>
+<li>instanceof/isInstance() 语义是,你是这个类还是从这个类派生出去的 Object(对象)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Class 的其它方法<ul>
+<li>Class::getInterfaces() // 返回对象继承的接口(数组)信息</li>
+<li>Class::getSuperclass() // 返回对象的父类(Java 只允许单一继承,所以只返回一个 Class 对象)</li>
+<li>Class::newInstance()  // 尽管我不知道你的准确的类型是什么,可能是该 Class 下的一个子类,但是请你准确的构造自己</li>
+<li>Class::getMethods()   // 返回对象的方法(数组)信息</li>
+<li>Class::getConstructors() // 返回对象的构造器(数组)信息</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Java反射的作用"><a href="#Java反射的作用" class="headerlink" title="Java反射的作用"></a>Java反射的作用</h5><ul>
+<li><p>利用 class 信息,能够动态生成一个实例,避免了在代码中硬编码 Object 信息</p>
+<ul>
+<li><p>Java 中的 SPI</p>
+<p>在代码中定义服务接口,不同的服务提供者提供服务的具体实现,在 META-INF 文件夹下面配置一个与服务接口相同名字的文件,里面定义服务的具体实现类，代码中通过类加载器(ClassLoader)加载<br>配置文件中定义的实现类 Class 对象,来完成实例化，而不必事先知道服务的具体实现。</p>
+<ul>
+<li>dubbo 中,广泛应用了Java 的 SPI 机制.ExtensionLoder 类充当了加载各种插件(Class)的作用</li>
+<li>有点类示于C++中的RTTI,不过 C++ 中是需要在代码里显示的初始化实现类的,这样就在代码里面形成了硬编码,当要替换实现时,会要替换很多地方,而Java中的SPI机制，仅仅只是需要更换配置文件中的实现类即可。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1505,7 +1673,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
