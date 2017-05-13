@@ -194,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -204,7 +204,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -237,6 +237,377 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/13/Spring中Bean的生成和定义/" itemprop="url">
+                  Spring中Bean的生成和定义
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-13T16:05:31+08:00">
+                2017-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="bean的定义"><a href="#bean的定义" class="headerlink" title="bean的定义"></a>bean的定义</h4><ul>
+<li><p>通过 java 代码定义 bean</p>
+<ul>
+<li>@Configuration<ul>
+<li>语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean</li>
+<li>@Bean: 显示定义 bean<ul>
+<li>语义:返回一个对象,并且将该对象注册到 spring 上下文中</li>
+<li>默认情况下创建的 bean 的 name(id) 就是是方法名</li>
+<li>(name = “beanName”) 自定义 bean 的名字</li>
+</ul>
+</li>
+<li>@Component + @ComponentScan / xml文件配置包扫描 ：通过组件扫描来发现 bean<ul>
+<li>@Component ： 组件(bean)的定义<ul>
+<li>语义:将被注解的类注册为一个bean，默认的 bean 的名为类名(第一个字母小写)</li>
+<li>@Component(“beanName”) 自定义 beanName</li>
+</ul>
+</li>
+<li>@ComponentScan 开启组件扫描<ul>
+<li>扫描当前类所在的包中的组件</li>
+<li>@ComponentScan(basePackages=”nameOfPackages”)/@ComponentScan(“nameOfPackages”) 指定扫描基础包,解决代码重构后,默认的扫描类位置的变动,而造成的扫描包的变动</li>
+</ul>
+</li>
+<li>使用 xml配置文件，通过标签&lt; context:component-scan basa-package = “nameOfPackages”&gt;同样能实现 @ComponentScan 注解的作用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>xml 文件配置 bean</p>
+<ul>
+<li>bean的配置文件同样需要遵循相关的规范,以 &lt; beans&gt; &lt; /beans&gt; 为根元素，类似于 @Configuration 的作用</li>
+<li>在&lt; bean&gt; &lt; /bean&gt; 显示配置相关的 bean</li>
+</ul>
+</li>
+</ul>
+<h4 id="bean的注入"><a href="#bean的注入" class="headerlink" title="bean的注入"></a>bean的注入</h4><ul>
+<li><p>显示配置完 bean 后,当 bean 初始化时,需要构造/初始化内部相关的引用属性，这个时候我们需要配置各个属性,为各个属性注入相关的引用,当然对于基本变量,这些就是由 spring 自动初始化的</p>
+</li>
+<li><p>通过 java 代码</p>
+<ul>
+<li>@Autowired (Spring中的注解)<ul>
+<li>按照 type 来注入</li>
+<li>required 属性:标注该注入的对象是否允许为 null</li>
+<li>@Qualifier(“beanName”) 限制注入的 bean 的名称，当按照 type 来注入的时候,有多个相同 type 的 bean 时,就会出现歧义,通过指定相关的 name(ID)消除这种歧义</li>
+</ul>
+</li>
+<li>@Resource （J2EE中的注解）<ul>
+<li>按照 name 来注入</li>
+<li>name 属性:限制注入的 bean 的名称(ID)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>xml文件中指定<ul>
+<li>&lt; constructor-arg &gt; 元素</li>
+<li>c-命名空间</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/28/Java并发工具类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/28/Java并发工具类/" itemprop="url">
+                  Java并发工具类
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-28T00:01:46+08:00">
+                2017-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h3><ul>
+<li>线程可以分为两个方面：线程运行的任务(task) 和 运行线程的实体(thread)<ul>
+<li>线程的任务实体 task<ul>
+<li>public void Runnable::run()</li>
+<li>public void Thread::run()</li>
+</ul>
+</li>
+<li>线程的构造<ul>
+<li>使用 Runnable 对象(提供 task)初始化 Thread</li>
+<li>直接继承 Thread 类,并且覆盖 run() 方法(提供 task)</li>
+</ul>
+</li>
+<li>线程的运行<ul>
+<li>public void Thread::start()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程池框架<ul>
+<li>interface:: Executor<ul>
+<li>public void Executor::execute(Runnable) 运行线程</li>
+</ul>
+</li>
+<li>构造线程池<ul>
+<li>Executor.newFixedThreadPool(threadNums) -&gt; 构造固定数目的线程，每次提交一个任务,创建一个线程,直到达到最大的线程数目</li>
+<li>Executor.newCachedThreadPool -&gt;  无限大小的线程池,会回收空闲线程</li>
+<li>Executor.newSingelThreadExecutor -&gt; 单线程数量的线程池</li>
+<li>Executor.newScheduledThreadPool -&gt; 固定长度的线程池，并且可以定时调度来执行任务</li>
+</ul>
+</li>
+<li>自定义线程池的执行方式<ul>
+<li>覆写 Executor::execute(Runnable)方法</li>
+</ul>
+</li>
+<li>interface::ExecutorService<ul>
+<li>继承 Executor，添加了一些关于 Executor 生命周期的管理方法</li>
+<li>生命周期:运行,关闭(不再接受新的任务提交),已终止(已经提交的任务已经全部运行)</li>
+<li>RejectedExecutionException 异常</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="任务的结果"><a href="#任务的结果" class="headerlink" title="任务的结果"></a>任务的结果</h3><ul>
+<li>Callable 与 Future<ul>
+<li>interface:: Callable<t><ul>
+<li>T call() throw Exception</li>
+</ul>
+</t></li>
+</ul>
+</li>
+</ul>
+<h3 id="工具类"><a href="#工具类" class="headerlink" title="工具类"></a>工具类</h3><ul>
+<li>interface::Lock<ul>
+<li>ReentrantLock 可重入锁<ul>
+<li><h3 id="todo-与内置锁的区别"><a href="#todo-与内置锁的区别" class="headerlink" title="todo:: 与内置锁的区别"></a>todo:: 与内置锁的区别</h3></li>
+</ul>
+</li>
+<li>轮询锁</li>
+<li>定时锁</li>
+<li>可中断锁获取操作</li>
+<li>读写锁</li>
+</ul>
+</li>
+<li>原子变量<ul>
+<li>处理器中实现 CAS 指令操作</li>
+<li>保证在 CAS 检查一个变量值后,设置新值过程中,另外一个线程改变了该值后,能够被感知到</li>
+<li>简单的说,就是 CAS 操作是一个被 Synchronized 保护起来的代码块</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -284,7 +655,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-24T00:00:05+08:00">
                 2017-04-24
@@ -628,7 +999,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-18T00:54:19+08:00">
                 2017-04-18
@@ -875,7 +1246,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T16:39:34+08:00">
                 2017-04-16
@@ -1006,7 +1377,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T00:35:49+08:00">
                 2017-04-16
@@ -1134,8 +1505,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">posts</span>
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -1189,7 +1560,7 @@
 
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

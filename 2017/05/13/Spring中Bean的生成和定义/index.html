@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="ssh登录ssh(Secure Shell)协议主要用于互联网上计算机的远程登录，为计算机的 Shell(壳层,主要与OS的内核通讯) 层，提供安全的数据传输和使用环境。 安全性如何保证 基于密码的安全验证用户请求登录远程主机时,主机将自己的公钥发送给用户，用户的传输数据使用远程主机的公钥进行加密，只有远程主机的私钥才能解密，以此来实现数据的传输安全。 中间人攻击基于密码的验证，当网络上有人截获你">
+<meta name="description" content="bean的定义 通过 java 代码定义 bean  @Configuration 语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean @Bean: 显示定义 bean 语义:返回一个对象,并且将该对象注册到 spring 上下文中 默认情况下创建的 bean 的 name(id) 就是是方法名 (name = “beanName”) 自定义 b">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GitHub的使用">
-<meta property="og:url" content="http://yoursite.com/2017/04/16/GitHub的使用/index.html">
+<meta property="og:title" content="Spring中Bean的生成和定义">
+<meta property="og:url" content="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="ssh登录ssh(Secure Shell)协议主要用于互联网上计算机的远程登录，为计算机的 Shell(壳层,主要与OS的内核通讯) 层，提供安全的数据传输和使用环境。 安全性如何保证 基于密码的安全验证用户请求登录远程主机时,主机将自己的公钥发送给用户，用户的传输数据使用远程主机的公钥进行加密，只有远程主机的私钥才能解密，以此来实现数据的传输安全。 中间人攻击基于密码的验证，当网络上有人截获你">
-<meta property="og:updated_time" content="2017-04-17T16:59:39.256Z">
+<meta property="og:description" content="bean的定义 通过 java 代码定义 bean  @Configuration 语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean @Bean: 显示定义 bean 语义:返回一个对象,并且将该对象注册到 spring 上下文中 默认情况下创建的 bean 的 name(id) 就是是方法名 (name = “beanName”) 自定义 b">
+<meta property="og:updated_time" content="2017-05-13T08:26:27.100Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GitHub的使用">
-<meta name="twitter:description" content="ssh登录ssh(Secure Shell)协议主要用于互联网上计算机的远程登录，为计算机的 Shell(壳层,主要与OS的内核通讯) 层，提供安全的数据传输和使用环境。 安全性如何保证 基于密码的安全验证用户请求登录远程主机时,主机将自己的公钥发送给用户，用户的传输数据使用远程主机的公钥进行加密，只有远程主机的私钥才能解密，以此来实现数据的传输安全。 中间人攻击基于密码的验证，当网络上有人截获你">
+<meta name="twitter:title" content="Spring中Bean的生成和定义">
+<meta name="twitter:description" content="bean的定义 通过 java 代码定义 bean  @Configuration 语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean @Bean: 显示定义 bean 语义:返回一个对象,并且将该对象注册到 spring 上下文中 默认情况下创建的 bean 的 name(id) 就是是方法名 (name = “beanName”) 自定义 b">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/16/GitHub的使用/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/"/>
 
 
 
 
 
-  <title> GitHub的使用 | Hexo </title>
+  <title> Spring中Bean的生成和定义 | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -250,7 +250,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/16/GitHub的使用/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -271,7 +271,7 @@
             
             
               
-                GitHub的使用
+                Spring中Bean的生成和定义
               
             
           </h1>
@@ -286,8 +286,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T16:39:34+08:00">
-                2017-04-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-13T16:05:31+08:00">
+                2017-05-13
               </time>
             
 
@@ -322,18 +322,67 @@
       
 
       
-        <h2 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h2><p>ssh(Secure Shell)协议主要用于互联网上计算机的远程登录，为计算机的 Shell(壳层,主要与OS的内核通讯) 层，提供安全的数据传输和使用环境。</p>
-<h4 id="安全性如何保证"><a href="#安全性如何保证" class="headerlink" title="安全性如何保证"></a>安全性如何保证</h4><ul>
-<li><h5 id="基于密码的安全验证"><a href="#基于密码的安全验证" class="headerlink" title="基于密码的安全验证"></a>基于密码的安全验证</h5><p>用户请求登录远程主机时,主机将自己的公钥发送给用户，用户的传输数据使用远程主机的公钥进行加密，只有远程主机的私钥才能解密，以此来实现数据的传输安全。</p>
-<h6 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h6><p>基于密码的验证，当网络上有人截获你的登录请求时,冒充远程主机，发送伪造的公钥给你，(不同于 https，使用的公钥是由与证书中心 CA 公证的)使用伪造的公钥加密通讯数据后,那么会截获并解析你的传输数据,再用截获的登录密码登录远程主机。</p>
+        <h4 id="bean的定义"><a href="#bean的定义" class="headerlink" title="bean的定义"></a>bean的定义</h4><ul>
+<li><p>通过 java 代码定义 bean</p>
+<ul>
+<li>@Configuration<ul>
+<li>语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean</li>
+<li>@Bean: 显示定义 bean<ul>
+<li>语义:返回一个对象,并且将该对象注册到 spring 上下文中</li>
+<li>默认情况下创建的 bean 的 name(id) 就是是方法名</li>
+<li>(name = “beanName”) 自定义 bean 的名字</li>
+</ul>
 </li>
-<li><h5 id="基于密钥的安全验证"><a href="#基于密钥的安全验证" class="headerlink" title="基于密钥的安全验证"></a>基于密钥的安全验证</h5><p>既然没有证书中心 CA 确认的公钥，那么我们自己可以在我们的范围内确认某一个公钥(某个实体的身份)的正确性，那就是我们自己生成一对私钥和公钥，通过将自己生成公钥放在远程服务器端。用户请求登录过程中,远程主机为了确认用户的身份，发送一段随机的字符串,让用户用私钥加密后，回传给远程服务端,远程服务端用事先用户存储的公钥进行解密,如果成功了，就证明用户是可信的,直接允许进行登录，而不用输入密码。</p>
-<h6 id="基于密钥的安全登录，不用输入登录名和密码-那么登录时，我们是以那个身份登录的呢？"><a href="#基于密钥的安全登录，不用输入登录名和密码-那么登录时，我们是以那个身份登录的呢？" class="headerlink" title="基于密钥的安全登录，不用输入登录名和密码,那么登录时，我们是以那个身份登录的呢？"></a>基于密钥的安全登录，不用输入登录名和密码,那么登录时，我们是以那个身份登录的呢？</h6><p>生成私钥和公钥的时候，会自动将我的的身份带入进去。ssh-keygen -C “yourName@hostname.com”,如果不设置，默认就是以当前的身份生成该私钥和公钥，公钥文件的最后会有这个用户身份。注意确认唯一的身份<br>是 yourName + hostname，不要将 -C 后面的内容想象成电子邮件(email),那是你身份的标识，即:hostname 上的 yourName 用户。</p>
+<li>@Component + @ComponentScan / xml文件配置包扫描 ：通过组件扫描来发现 bean<ul>
+<li>@Component ： 组件(bean)的定义<ul>
+<li>语义:将被注解的类注册为一个bean，默认的 bean 的名为类名(第一个字母小写)</li>
+<li>@Component(“beanName”) 自定义 beanName</li>
+</ul>
 </li>
-<li><h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>由于使用 ssh 协议传输的过程中,没有一个统一的公钥证书中心(CA) 来标识网络上的某个实体的身份,我们唯一能确认的就是我们自己生成的公钥,基于密钥的安全验证，实际上是由我们来验证服务端(放置了可信的公钥的实体)，而基于密码的验证方式远程服务端来验证我们,我们的登录请求可能会发往网络上的任何一台计算机,所以可能导致了冒牌远程服务端的出现(不进行任何的验证，只是希望得到我们的登录请求)。</p>
+<li>@ComponentScan 开启组件扫描<ul>
+<li>扫描当前类所在的包中的组件</li>
+<li>@ComponentScan(basePackages=”nameOfPackages”)/@ComponentScan(“nameOfPackages”) 指定扫描基础包,解决代码重构后,默认的扫描类位置的变动,而造成的扫描包的变动</li>
+</ul>
+</li>
+<li>使用 xml配置文件，通过标签&lt; context:component-scan basa-package = “nameOfPackages”&gt;同样能实现 @ComponentScan 注解的作用</li>
+</ul>
 </li>
 </ul>
-<h4 id="密钥与公钥"><a href="#密钥与公钥" class="headerlink" title="密钥与公钥"></a>密钥与公钥</h4><h2 id="github的验证"><a href="#github的验证" class="headerlink" title="github的验证"></a>github的验证</h2>
+</li>
+</ul>
+</li>
+<li><p>xml 文件配置 bean</p>
+<ul>
+<li>bean的配置文件同样需要遵循相关的规范,以 &lt; beans&gt; &lt; /beans&gt; 为根元素，类似于 @Configuration 的作用</li>
+<li>在&lt; bean&gt; &lt; /bean&gt; 显示配置相关的 bean</li>
+</ul>
+</li>
+</ul>
+<h4 id="bean的注入"><a href="#bean的注入" class="headerlink" title="bean的注入"></a>bean的注入</h4><ul>
+<li><p>显示配置完 bean 后,当 bean 初始化时,需要构造/初始化内部相关的引用属性，这个时候我们需要配置各个属性,为各个属性注入相关的引用,当然对于基本变量,这些就是由 spring 自动初始化的</p>
+</li>
+<li><p>通过 java 代码</p>
+<ul>
+<li>@Autowired (Spring中的注解)<ul>
+<li>按照 type 来注入</li>
+<li>required 属性:标注该注入的对象是否允许为 null</li>
+<li>@Qualifier(“beanName”) 限制注入的 bean 的名称，当按照 type 来注入的时候,有多个相同 type 的 bean 时,就会出现歧义,通过指定相关的 name(ID)消除这种歧义</li>
+</ul>
+</li>
+<li>@Resource （J2EE中的注解）<ul>
+<li>按照 name 来注入</li>
+<li>name 属性:限制注入的 bean 的名称(ID)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>xml文件中指定<ul>
+<li>&lt; constructor-arg &gt; 元素</li>
+<li>c-命名空间</li>
+</ul>
+</li>
+</ul>
+
       
     </div>
 
@@ -369,18 +418,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/18/effective-java学习笔记/" rel="next" title="effective-java笔记">
-                <i class="fa fa-chevron-left"></i> effective-java笔记
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/16/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/28/Java并发工具类/" rel="prev" title="Java并发工具类">
+                Java并发工具类 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -492,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh登录"><span class="nav-number">1.</span> <span class="nav-text">ssh登录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安全性如何保证"><span class="nav-number">1.0.1.</span> <span class="nav-text">安全性如何保证</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基于密码的安全验证"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">基于密码的安全验证</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#中间人攻击"><span class="nav-number">1.0.1.1.1.</span> <span class="nav-text">中间人攻击</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于密钥的安全验证"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">基于密钥的安全验证</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#基于密钥的安全登录，不用输入登录名和密码-那么登录时，我们是以那个身份登录的呢？"><span class="nav-number">1.0.1.2.1.</span> <span class="nav-text">基于密钥的安全登录，不用输入登录名和密码,那么登录时，我们是以那个身份登录的呢？</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#密钥与公钥"><span class="nav-number">1.0.2.</span> <span class="nav-text">密钥与公钥</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github的验证"><span class="nav-number">2.</span> <span class="nav-text">github的验证</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#bean的定义"><span class="nav-number">1.</span> <span class="nav-text">bean的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bean的注入"><span class="nav-number">2.</span> <span class="nav-text">bean的注入</span></a></li></ol></div>
             
 
           </div>
