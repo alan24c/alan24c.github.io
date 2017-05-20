@@ -94,7 +94,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/05/20/spring整合Mybatis/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
-<meta property="og:updated_time" content="2017-05-20T14:38:16.082Z">
+<meta property="og:updated_time" content="2017-05-20T14:44:32.600Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring整合bean">
 <meta name="twitter:description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
@@ -197,7 +197,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -207,7 +207,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -284,7 +284,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-20T22:14:31+08:00">
                 2017-05-20
@@ -355,7 +355,17 @@
 </li>
 </ul>
 <h5 id="配置-session-模板"><a href="#配置-session-模板" class="headerlink" title="配置 session 模板"></a>配置 session 模板</h5><p>使用 SqlSessionFactoryBean 来生成 session 模板<br>通过往 SqlSessionTemplate 中的构造函数中，传入(第一个参数位置)sqlSessionFactory，来生成 sqlSession</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSession"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionTemplate"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">ref</span>=<span class="string">"sqlSessionFactory"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line"></div><div class="line">```  </div><div class="line"></div><div class="line">##### 使用 session 模板来完数据库操作</div><div class="line">- 隐式使用</div><div class="line">  - 当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</div><div class="line"></div><div class="line">- 显示使用</div><div class="line"></div><div class="line">###### 显示注入 DAO 层</div><div class="line"></div><div class="line">```xml</div><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.sample.dao.UserDaoImpl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSession"</span> <span class="attr">ref</span>=<span class="string">"sqlSession"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span> = <span class="string">"sqlSession"</span> <span class="attr">class</span> = <span class="string">"org.mybatis.spring.SqlSessionTemplate"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span> = <span class="string">"0"</span>,<span class="attr">ref</span> = <span class="string">"sqlSessionFactory"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="使用-session-模板来完数据库操作"><a href="#使用-session-模板来完数据库操作" class="headerlink" title="使用 session 模板来完数据库操作"></a>使用 session 模板来完数据库操作</h5><ul>
+<li><p>隐式使用</p>
+<ul>
+<li>当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</li>
+</ul>
+</li>
+<li><p>显示使用</p>
+</li>
+</ul>
+<h6 id="显示注入-DAO-层"><a href="#显示注入-DAO-层" class="headerlink" title="显示注入 DAO 层"></a>显示注入 DAO 层</h6><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.sample.dao.UserDaoImpl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSession"</span> <span class="attr">ref</span>=<span class="string">"sqlSession"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
 <h6 id="显示调用-sqlSession"><a href="#显示调用-sqlSession" class="headerlink" title="显示调用 sqlSession"></a>显示调用 sqlSession</h6><pre><code class="java"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span> </span>{
 
   <span class="keyword">private</span> SqlSession sqlSession;
@@ -462,10 +472,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -486,7 +496,7 @@
             <div class="site-state-item site-state-posts">
               <a href="/archives">
                 <span class="site-state-item-count">9</span>
-                <span class="site-state-item-name">Artikel</span>
+                <span class="site-state-item-name">posts</span>
               </a>
             </div>
           
@@ -524,7 +534,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-DAO-接口-映射到具体的-xml-文件"><span class="nav-number">1.</span> <span class="nav-text">配置 DAO 接口,映射到具体的 xml 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-mapper-接口-使其动态生成-bean"><span class="nav-number">2.</span> <span class="nav-text">配置 mapper 接口,使其动态生成 bean</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#生成-mapper-接口代理"><span class="nav-number">2.0.1.</span> <span class="nav-text">生成 mapper 接口代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将上述配置类生成-bean-加载到-spring-中"><span class="nav-number">2.0.2.</span> <span class="nav-text">将上述配置类生成 bean,加载到 spring 中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关配置类如下"><span class="nav-number">2.0.3.</span> <span class="nav-text">相关配置类如下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-中的配置文件"><span class="nav-number">3.</span> <span class="nav-text">spring 中的配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><span class="nav-number">3.0.1.</span> <span class="nav-text">配置数据库连接池，使用 spring 中的 DriverManagerDataSource</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-工厂"><span class="nav-number">3.0.2.</span> <span class="nav-text">配置 session 工厂</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-模板"><span class="nav-number">3.0.3.</span> <span class="nav-text">配置 session 模板</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#显示调用-sqlSession"><span class="nav-number">3.0.3.1.</span> <span class="nav-text">显示调用 sqlSession</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-DAO-接口-映射到具体的-xml-文件"><span class="nav-number">1.</span> <span class="nav-text">配置 DAO 接口,映射到具体的 xml 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-mapper-接口-使其动态生成-bean"><span class="nav-number">2.</span> <span class="nav-text">配置 mapper 接口,使其动态生成 bean</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#生成-mapper-接口代理"><span class="nav-number">2.0.1.</span> <span class="nav-text">生成 mapper 接口代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将上述配置类生成-bean-加载到-spring-中"><span class="nav-number">2.0.2.</span> <span class="nav-text">将上述配置类生成 bean,加载到 spring 中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关配置类如下"><span class="nav-number">2.0.3.</span> <span class="nav-text">相关配置类如下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-中的配置文件"><span class="nav-number">3.</span> <span class="nav-text">spring 中的配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><span class="nav-number">3.0.1.</span> <span class="nav-text">配置数据库连接池，使用 spring 中的 DriverManagerDataSource</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-工厂"><span class="nav-number">3.0.2.</span> <span class="nav-text">配置 session 工厂</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-模板"><span class="nav-number">3.0.3.</span> <span class="nav-text">配置 session 模板</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用-session-模板来完数据库操作"><span class="nav-number">3.0.4.</span> <span class="nav-text">使用 session 模板来完数据库操作</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#显示注入-DAO-层"><span class="nav-number">3.0.4.1.</span> <span class="nav-text">显示注入 DAO 层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#显示调用-sqlSession"><span class="nav-number">3.0.4.2.</span> <span class="nav-text">显示调用 sqlSession</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -556,7 +566,7 @@
 
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
