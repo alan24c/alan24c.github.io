@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="Java反射的基础 : Class对象 Java 虚拟机编译时候会创建 class 文件,包含了类的所有信息 Class.forName(“nameOfClass”) 加载 class 文件,返回一个 Class 对象     Object instanceof “nameOfClass” 和 class.isInstance(Object)的区别 两者动态等价,都是判断运行中的某个对象是否是指定">
+<meta name="description" content="事务什么是事务？  事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。  事务的ACID特性  A：Atomic，原子性   C：Consistency,一致性 I：Isolation,隔离性 D：Durability,持久性  事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sq">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java中的反射">
-<meta property="og:url" content="http://yoursite.com/2017/05/13/Java中的反射/index.html">
+<meta property="og:title" content="Mysql中的事务">
+<meta property="og:url" content="http://yoursite.com/2017/05/19/Mysql中的事务/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Java反射的基础 : Class对象 Java 虚拟机编译时候会创建 class 文件,包含了类的所有信息 Class.forName(“nameOfClass”) 加载 class 文件,返回一个 Class 对象     Object instanceof “nameOfClass” 和 class.isInstance(Object)的区别 两者动态等价,都是判断运行中的某个对象是否是指定">
-<meta property="og:updated_time" content="2017-05-13T11:36:51.890Z">
+<meta property="og:description" content="事务什么是事务？  事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。  事务的ACID特性  A：Atomic，原子性   C：Consistency,一致性 I：Isolation,隔离性 D：Durability,持久性  事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sq">
+<meta property="og:updated_time" content="2017-05-20T01:45:22.472Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中的反射">
-<meta name="twitter:description" content="Java反射的基础 : Class对象 Java 虚拟机编译时候会创建 class 文件,包含了类的所有信息 Class.forName(“nameOfClass”) 加载 class 文件,返回一个 Class 对象     Object instanceof “nameOfClass” 和 class.isInstance(Object)的区别 两者动态等价,都是判断运行中的某个对象是否是指定">
+<meta name="twitter:title" content="Mysql中的事务">
+<meta name="twitter:description" content="事务什么是事务？  事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。  事务的ACID特性  A：Atomic，原子性   C：Consistency,一致性 I：Isolation,隔离性 D：Durability,持久性  事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sq">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/13/Java中的反射/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/19/Mysql中的事务/"/>
 
 
 
 
 
-  <title> Java中的反射 | Hexo </title>
+  <title> Mysql中的事务 | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -250,7 +250,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Java中的反射/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/Mysql中的事务/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -271,7 +271,7 @@
             
             
               
-                Java中的反射
+                Mysql中的事务
               
             
           </h1>
@@ -286,8 +286,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-13T17:21:19+08:00">
-                2017-05-13
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-19T23:02:32+08:00">
+                2017-05-19
               </time>
             
 
@@ -322,53 +322,68 @@
       
 
       
-        <h5 id="Java反射的基础-Class对象"><a href="#Java反射的基础-Class对象" class="headerlink" title="Java反射的基础 : Class对象"></a>Java反射的基础 : Class对象</h5><ul>
-<li>Java 虚拟机编译时候会创建 class 文件,包含了类的所有信息<ul>
-<li>Class.forName(“nameOfClass”) 加载 class 文件,返回一个 Class 对象    <ul>
-<li>Object instanceof “nameOfClass” 和 class.isInstance(Object)的区别<ul>
-<li>两者动态等价,都是判断运行中的某个对象是否是指定 Class 的实例,语义是:你(Object)是这个类还是从这个类(Class)派生出去的      </li>
-<li>两者的区别  <ul>
-<li>instanceof 关键字</li>
-<li>isInstance() Class 对象的方法</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Class 对象的 equale 和 ==<ul>
-<li>equal 和 == 动态等价</li>
-</ul>
-</li>
-<li>equale/== 和 instanceof/isInstance() 的区别<ul>
-<li>equale/== 意义一样,instanceof/isInstance() 意义一样</li>
-<li>equale/== 实际比较的是 class 的对象,不牵涉到继承的问题</li>
-<li>instanceof/isInstance() 语义是,你是这个类还是从这个类派生出去的 Object(对象)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Class 的其它方法<ul>
-<li>Class::getInterfaces() // 返回对象继承的接口(数组)信息</li>
-<li>Class::getSuperclass() // 返回对象的父类(Java 只允许单一继承,所以只返回一个 Class 对象)</li>
-<li>Class::newInstance()  // 尽管我不知道你的准确的类型是什么,可能是该 Class 下的一个子类,但是请你准确的构造自己</li>
-<li>Class::getMethods()   // 返回对象的方法(数组)信息</li>
-<li>Class::getConstructors() // 返回对象的构造器(数组)信息</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h5 id="Java反射的作用"><a href="#Java反射的作用" class="headerlink" title="Java反射的作用"></a>Java反射的作用</h5><ul>
-<li><p>利用 class 信息,能够动态生成一个实例,避免了在代码中硬编码 Object 信息</p>
+        <h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>什么是事务？</p>
 <ul>
-<li><p>Java 中的 SPI</p>
-<p>在代码中定义服务接口,不同的服务提供者提供服务的具体实现,在 META-INF 文件夹下面配置一个与服务接口相同名字的文件,里面定义服务的具体实现类，代码中通过类加载器(ClassLoader)加载<br>配置文件中定义的实现类 Class 对象,来完成实例化，而不必事先知道服务的具体实现。</p>
+<li>事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。</li>
+</ul>
+<p>事务的ACID特性</p>
 <ul>
-<li>dubbo 中,广泛应用了Java 的 SPI 机制.ExtensionLoder 类充当了加载各种插件(Class)的作用</li>
-<li>有点类示于C++中的RTTI,不过 C++ 中是需要在代码里显示的初始化实现类的,这样就在代码里面形成了硬编码,当要替换实现时,会要替换很多地方,而Java中的SPI机制，仅仅只是需要更换配置文件中的实现类即可。</li>
+<li>A：Atomic，原子性  </li>
+<li>C：Consistency,一致性</li>
+<li>I：Isolation,隔离性</li>
+<li>D：Durability,持久性</li>
+</ul>
+<p>事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sql 语句要么全部执行成功,若事务中有一条语句执行失败,则全部回滚，保证事务的原子性;同时保证了数据库中数据的一致性,不会出现事务进行过程中的一个中间状态;commit(提交)后的事务,则永久存储在数据库中了，即持久性。</p>
+<h5 id="事务的一致性"><a href="#事务的一致性" class="headerlink" title="事务的一致性"></a>事务的一致性</h5><ul>
+<li>事务的隔离级别<ul>
+<li>read uncommitted<ul>
+<li>并发情况下,所有的事务都能看到其它事务未提交的结果</li>
+</ul>
+</li>
+<li>read committed<ul>
+<li>并发情况下,所有的事务只能看到其它事务以提交的结果</li>
+<li>这种隔离级别下会出现不可重复读的现象,即,并发情况下,由于其它事务提交了数据的变更，造成了同一个事务,多次读取相同数据时,可能会得到不一样的结果。这违反了事务的隔离性。</li>
+</ul>
+</li>
+<li>repeatable read (mysql 默认的隔离级别)<ul>
+<li>并发情况下,同一个事务中，多次读取相同数据时,会得到同样的结果。</li>
+</ul>
+</li>
+<li>serializable<ul>
+<li>串行化读,对数据没有竞争关系</li>
 </ul>
 </li>
 </ul>
 </li>
+</ul>
+<h5 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h5><ul>
+<li>使用 MVCC(多版本并发控制)来解决并发条件下,读数据时，不采用等待写锁释放的条件下,对读与写操作的控制<ul>
+<li>如果读的某行数据正在被更改,那么该读取操作不会等待该行上锁的释放，而是去读取行的一个快照(snap)信息。</li>
+<li>快照版本的选取<ul>
+<li>read committed 隔离级别下，选取锁定行的最新的一个快照信息  –&gt; 不可重复读的现象</li>
+<li>repeatable read 隔离级别下,选取锁定行的事务开始前的行的版本信息 –&gt; 可重复读</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="一致性锁定读"><a href="#一致性锁定读" class="headerlink" title="一致性锁定读"></a>一致性锁定读</h5><ul>
+<li>读取数据时,显示对数据库进行加锁,用以保证数据逻辑的一致性<ul>
+<li>行锁的3种算法<ul>
+<li>Record Lock :单行上锁</li>
+<li>Gap Lock: 间隙锁</li>
+<li>Next-key Lock (Record Lock + Gap Lock)<ul>
+<li>使用 Next-key Lock 解决幻读现象：同一事务下,连续两次同样的SQL语句,可能导致不同的结果,第二次的 SQL 可能会返回之前不存在的行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="幻读，可-不可重复读"><a href="#幻读，可-不可重复读" class="headerlink" title="幻读，可/不可重复读"></a>幻读，可/不可重复读</h5><ul>
+<li>幻读：整个表结构而言,整个表结构可能在某个事务进行过程中被更改(数据行的增/删)</li>
+<li>可/不可重复读: 对单行数据而言,读取的单行数据的快照版本信息的不同</li>
 </ul>
 
       
@@ -406,18 +421,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/19/Mysql中的事务/" rel="next" title="Mysql中的事务">
-                <i class="fa fa-chevron-left"></i> Mysql中的事务
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/05/13/Spring中Bean的生成和定义/" rel="prev" title="Spring中Bean的生成和定义">
-                Spring中Bean的生成和定义 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/05/13/Java中的反射/" rel="prev" title="Java中的反射">
+                Java中的反射 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -529,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#Java反射的基础-Class对象"><span class="nav-number">1.</span> <span class="nav-text">Java反射的基础 : Class对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Java反射的作用"><span class="nav-number">2.</span> <span class="nav-text">Java反射的作用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#事务"><span class="nav-number">1.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#事务的一致性"><span class="nav-number">1.1.</span> <span class="nav-text">事务的一致性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一致性非锁定读"><span class="nav-number">1.2.</span> <span class="nav-text">一致性非锁定读</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一致性锁定读"><span class="nav-number">1.3.</span> <span class="nav-text">一致性锁定读</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#幻读，可-不可重复读"><span class="nav-number">1.4.</span> <span class="nav-text">幻读，可/不可重复读</span></a></li></ol></li></ol></div>
             
 
           </div>

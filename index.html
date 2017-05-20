@@ -247,6 +247,189 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/Mysql中的事务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/19/Mysql中的事务/" itemprop="url">
+                  Mysql中的事务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-19T23:02:32+08:00">
+                2017-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>什么是事务？</p>
+<ul>
+<li>事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。</li>
+</ul>
+<p>事务的ACID特性</p>
+<ul>
+<li>A：Atomic，原子性  </li>
+<li>C：Consistency,一致性</li>
+<li>I：Isolation,隔离性</li>
+<li>D：Durability,持久性</li>
+</ul>
+<p>事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sql 语句要么全部执行成功,若事务中有一条语句执行失败,则全部回滚，保证事务的原子性;同时保证了数据库中数据的一致性,不会出现事务进行过程中的一个中间状态;commit(提交)后的事务,则永久存储在数据库中了，即持久性。</p>
+<h5 id="事务的一致性"><a href="#事务的一致性" class="headerlink" title="事务的一致性"></a>事务的一致性</h5><ul>
+<li>事务的隔离级别<ul>
+<li>read uncommitted<ul>
+<li>并发情况下,所有的事务都能看到其它事务未提交的结果</li>
+</ul>
+</li>
+<li>read committed<ul>
+<li>并发情况下,所有的事务只能看到其它事务以提交的结果</li>
+<li>这种隔离级别下会出现不可重复读的现象,即,并发情况下,由于其它事务提交了数据的变更，造成了同一个事务,多次读取相同数据时,可能会得到不一样的结果。这违反了事务的隔离性。</li>
+</ul>
+</li>
+<li>repeatable read (mysql 默认的隔离级别)<ul>
+<li>并发情况下,同一个事务中，多次读取相同数据时,会得到同样的结果。</li>
+</ul>
+</li>
+<li>serializable<ul>
+<li>串行化读,对数据没有竞争关系</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h5><ul>
+<li>使用 MVCC(多版本并发控制)来解决并发条件下,读数据时，不采用等待写锁释放的条件下,对读与写操作的控制<ul>
+<li>如果读的某行数据正在被更改,那么该读取操作不会等待该行上锁的释放，而是去读取行的一个快照(snap)信息。</li>
+<li>快照版本的选取<ul>
+<li>read committed 隔离级别下，选取锁定行的最新的一个快照信息  –&gt; 不可重复读的现象</li>
+<li>repeatable read 隔离级别下,选取锁定行的事务开始前的行的版本信息 –&gt; 可重复读</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="一致性锁定读"><a href="#一致性锁定读" class="headerlink" title="一致性锁定读"></a>一致性锁定读</h5><ul>
+<li>读取数据时,显示对数据库进行加锁,用以保证数据逻辑的一致性<ul>
+<li>行锁的3种算法<ul>
+<li>Record Lock :单行上锁</li>
+<li>Gap Lock: 间隙锁</li>
+<li>Next-key Lock (Record Lock + Gap Lock)<ul>
+<li>使用 Next-key Lock 解决幻读现象：同一事务下,连续两次同样的SQL语句,可能导致不同的结果,第二次的 SQL 可能会返回之前不存在的行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="幻读，可-不可重复读"><a href="#幻读，可-不可重复读" class="headerlink" title="幻读，可/不可重复读"></a>幻读，可/不可重复读</h5><ul>
+<li>幻读：整个表结构而言,整个表结构可能在某个事务进行过程中被更改(数据行的增/删)</li>
+<li>可/不可重复读: 对单行数据而言,读取的单行数据的快照版本信息的不同</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Java中的反射/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1673,7 +1856,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
