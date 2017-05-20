@@ -1,0 +1,704 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring整合bean">
+<meta property="og:url" content="http://yoursite.com/2017/05/20/spring整合Mybatis/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
+<meta property="og:updated_time" content="2017-05-20T14:29:35.038Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring整合bean">
+<meta name="twitter:description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/20/spring整合Mybatis/"/>
+
+
+
+
+
+  <title> spring整合bean | Hexo </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/spring整合Mybatis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                spring整合bean
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-20T22:14:31+08:00">
+                2017-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="配置-DAO-接口-映射到具体的-xml-文件"><a href="#配置-DAO-接口-映射到具体的-xml-文件" class="headerlink" title="配置 DAO 接口,映射到具体的 xml 文件"></a>配置 DAO 接口,映射到具体的 xml 文件</h3><ul>
+<li>xml 文件中 &lt; mapper namespace = “…”&gt; &lt; /mapper&gt;标签<ul>
+<li>通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层</li>
+<li>可以认为 xml 文件是 DAO 接口的一个实现类</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> user.mapper;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDAO</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span> = <span class="string">"user.mapper.UserDAO"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span> = <span class="string">updateUser</span> <span class="attr">...</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">update</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="配置-mapper-接口-使其动态生成-bean"><a href="#配置-mapper-接口-使其动态生成-bean" class="headerlink" title="配置 mapper 接口,使其动态生成 bean"></a>配置 mapper 接口,使其动态生成 bean</h3><h5 id="生成-mapper-接口代理"><a href="#生成-mapper-接口代理" class="headerlink" title="生成 mapper 接口代理"></a>生成 mapper 接口代理</h5><p>使用 mybatis时，一般定义 mapper 接口,但是 interface 接口类型不能直接在 spring 注册为 bean,使用 @MapperScan 注解来配置 mapper 接口,生成相应的 bean</p>
+<ul>
+<li>@MapperScan(value=”…”)<ul>
+<li>使用 value 属性配置 mapper 文件的包</li>
+<li>将自动扫描 mapper 接口,生成代理注入到 Spring 中去</li>
+</ul>
+</li>
+</ul>
+<h5 id="将上述配置类生成-bean-加载到-spring-中"><a href="#将上述配置类生成-bean-加载到-spring-中" class="headerlink" title="将上述配置类生成 bean,加载到 spring 中"></a>将上述配置类生成 bean,加载到 spring 中</h5><ul>
+<li>使用组件扫描将上述配置类注入到 spring 中去</li>
+<li>@Configuration 注解</li>
+</ul>
+<h5 id="相关配置类如下"><a href="#相关配置类如下" class="headerlink" title="相关配置类如下"></a>相关配置类如下</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@MaperScan</span>(value=<span class="string">"com.mapper"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Appconfig</span></span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="spring-中的配置文件"><a href="#spring-中的配置文件" class="headerlink" title="spring 中的配置文件"></a>spring 中的配置文件</h3><h5 id="配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><a href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource" class="headerlink" title="配置数据库连接池，使用 spring 中的 DriverManagerDataSource"></a>配置数据库连接池，使用 spring 中的 DriverManagerDataSource</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driverClassName&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="配置-session-工厂"><a href="#配置-session-工厂" class="headerlink" title="配置 session 工厂"></a>配置 session 工厂</h5><p>SqlSessionFactoryBean 实现了 FactoryBean，所以最终创建的 bean 不是 SqlSessionFactoryBean 本身,e而是工厂类下 getObject() 返回的方法的结果.<br>不需要显示的使用 SqlSessionFactoryBean，相反 getObject() 返回的 session 会被注入到 MapperFactoryBean(即上述通过 @MaperScan 注解生成的 bean) 和实现了 SqlSessionDaoSupport 的 DAO 对象层去。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeAliasesPackage"</span> <span class="attr">value</span>=<span class="string">"mybatisDomain"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeHandlersPackage"</span> <span class="attr">value</span>=<span class="string">"typehandlers"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperLocations"</span> <span class="attr">value</span>=<span class="string">"classpath*:mappers/*.xml"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>指定 XML mapper 文件的位置<ul>
+<li>在 sqlSessionFactory 中通过属性 mapperLocations 来指定</li>
+<li>在 MyBatis 配置文件中通过 <mappers> 标签来指定.</mappers></li>
+</ul>
+</li>
+</ul>
+<h5 id="配置-session-模板"><a href="#配置-session-模板" class="headerlink" title="配置 session 模板"></a>配置 session 模板</h5><p>使用 SqlSessionFactoryBean 来生成 session 模板<br>通过往 SqlSessionTemplate 中的构造函数中，传入(第一个参数位置)sqlSessionFactory，来生成 sqlSession</p>
+<h5 id="使用-session-模板来完数据库操作"><a href="#使用-session-模板来完数据库操作" class="headerlink" title="使用 session 模板来完数据库操作"></a>使用 session 模板来完数据库操作</h5><ul>
+<li><p>隐式使用</p>
+<ul>
+<li>当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</li>
+</ul>
+</li>
+<li><p>显示使用</p>
+<ul>
+<li>显示注入 DAO 层</li>
+<li>显示调用 sqlSession</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class UserDaoImpl implements UserDao &#123;</div><div class="line"></div><div class="line">  private SqlSession sqlSession;</div><div class="line"></div><div class="line">  public void setSqlSession(SqlSession sqlSession) &#123;</div><div class="line">    this.sqlSession = sqlSession;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public User getUser(String userId) &#123;</div><div class="line">    return (User) sqlSession.selectOne("org.mybatis.spring.sample.mapper.UserMapper.getUser", userId);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">```  </div><div class="line"></div><div class="line">```xml</div><div class="line">&lt;bean id="userDao" class="org.mybatis.spring.sample.dao.UserDaoImpl"&gt;</div><div class="line">  &lt;property name="sqlSession" ref="sqlSession" /&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/19/Mysql中的事务/" rel="prev" title="Mysql中的事务">
+                Mysql中的事务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-DAO-接口-映射到具体的-xml-文件"><span class="nav-number">1.</span> <span class="nav-text">配置 DAO 接口,映射到具体的 xml 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-mapper-接口-使其动态生成-bean"><span class="nav-number">2.</span> <span class="nav-text">配置 mapper 接口,使其动态生成 bean</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#生成-mapper-接口代理"><span class="nav-number">2.0.1.</span> <span class="nav-text">生成 mapper 接口代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将上述配置类生成-bean-加载到-spring-中"><span class="nav-number">2.0.2.</span> <span class="nav-text">将上述配置类生成 bean,加载到 spring 中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关配置类如下"><span class="nav-number">2.0.3.</span> <span class="nav-text">相关配置类如下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-中的配置文件"><span class="nav-number">3.</span> <span class="nav-text">spring 中的配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><span class="nav-number">3.0.1.</span> <span class="nav-text">配置数据库连接池，使用 spring 中的 DriverManagerDataSource</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-工厂"><span class="nav-number">3.0.2.</span> <span class="nav-text">配置 session 工厂</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-模板"><span class="nav-number">3.0.3.</span> <span class="nav-text">配置 session 模板</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用-session-模板来完数据库操作"><span class="nav-number">3.0.4.</span> <span class="nav-text">使用 session 模板来完数据库操作</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
