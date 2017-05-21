@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="bean的定义 通过 java 代码定义 bean  @Configuration 语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean @Bean: 显示定义 bean 语义:返回一个对象,并且将该对象注册到 spring 上下文中 默认情况下创建的 bean 的 name(id) 就是是方法名 (name = “beanName”) 自定义 b">
+<meta name="description" content="JDK动态代理 动态创建代理对象的 Class 12// 返回一个代理 Class 对象Clas proxyClass = Proxy.getProxyClass(ClassLoader loader,Class class);  生成代理类的实例 12345// 获取构造函数为 InvocationHandler.class 的构造器Constructor proxyClassConstruct">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring中Bean的生成和定义">
-<meta property="og:url" content="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/index.html">
+<meta property="og:title" content="Java中的代理模式">
+<meta property="og:url" content="http://yoursite.com/2017/05/21/Java中的代理模式/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="bean的定义 通过 java 代码定义 bean  @Configuration 语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean @Bean: 显示定义 bean 语义:返回一个对象,并且将该对象注册到 spring 上下文中 默认情况下创建的 bean 的 name(id) 就是是方法名 (name = “beanName”) 自定义 b">
-<meta property="og:updated_time" content="2017-05-13T08:26:27.100Z">
+<meta property="og:description" content="JDK动态代理 动态创建代理对象的 Class 12// 返回一个代理 Class 对象Clas proxyClass = Proxy.getProxyClass(ClassLoader loader,Class class);  生成代理类的实例 12345// 获取构造函数为 InvocationHandler.class 的构造器Constructor proxyClassConstruct">
+<meta property="og:updated_time" content="2017-05-21T08:39:03.418Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring中Bean的生成和定义">
-<meta name="twitter:description" content="bean的定义 通过 java 代码定义 bean  @Configuration 语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean @Bean: 显示定义 bean 语义:返回一个对象,并且将该对象注册到 spring 上下文中 默认情况下创建的 bean 的 name(id) 就是是方法名 (name = “beanName”) 自定义 b">
+<meta name="twitter:title" content="Java中的代理模式">
+<meta name="twitter:description" content="JDK动态代理 动态创建代理对象的 Class 12// 返回一个代理 Class 对象Clas proxyClass = Proxy.getProxyClass(ClassLoader loader,Class class);  生成代理类的实例 12345// 获取构造函数为 InvocationHandler.class 的构造器Constructor proxyClassConstruct">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/21/Java中的代理模式/"/>
 
 
 
 
 
-  <title> Spring中Bean的生成和定义 | Hexo </title>
+  <title> Java中的代理模式 | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -250,7 +250,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Spring中Bean的生成和定义/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/Java中的代理模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -271,7 +271,7 @@
             
             
               
-                Spring中Bean的生成和定义
+                Java中的代理模式
               
             
           </h1>
@@ -286,8 +286,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-13T16:05:31+08:00">
-                2017-05-13
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-21T15:15:27+08:00">
+                2017-05-21
               </time>
             
 
@@ -322,66 +322,33 @@
       
 
       
-        <h4 id="bean的定义"><a href="#bean的定义" class="headerlink" title="bean的定义"></a>bean的定义</h4><ul>
-<li><p>通过 java 代码定义 bean</p>
+        <h4 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h4><ul>
+<li><p>动态创建代理对象的 Class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 返回一个代理 Class 对象</span></div><div class="line">Clas proxyClass = Proxy.getProxyClass(ClassLoader loader,Class <span class="class"><span class="keyword">class</span>)</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成代理类的实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获取构造函数为 InvocationHandler.class 的构造器</span></div><div class="line">Constructor proxyClassConstructor =  Class.getConstructors(InvocationHandler.class);  </div><div class="line"></div><div class="line"><span class="comment">// 生成代理对象</span></div><div class="line">Object proxyObject = proxyClassConstructor.newInstance(<span class="keyword">new</span> InvocationHandler());</div></pre></td></tr></table></figure>
+</li>
+<li><p>接口 InvocationHandler</p>
 <ul>
-<li>@Configuration<ul>
-<li>语义：配置类,在该类中包含了在应用中创建相关 bean 的逻辑,可以通过该类管理整个应用中的 bean</li>
-<li>@Bean: 显示定义 bean<ul>
-<li>语义:返回一个对象,并且将该对象注册到 spring 上下文中</li>
-<li>默认情况下创建的 bean 的 name(id) 就是是方法名</li>
-<li>(name = “beanName”) 自定义 bean 的名字</li>
+<li>InvocationHandler 是动态代理的核心,对代理对象的方法调用都会转发到 InvocationHandler::invoke() 方法中</li>
 </ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">InvocationHandler</span></span>&#123;</div><div class="line">  <span class="comment">// 交给实现类去实现，在这里拦截每一次对代理对象的调用,具体实现交给子类实现：或是仅仅转发到具体的实现类,亦或是实现相关方法的增强</span></div><div class="line">  <span class="comment">// proxy  :代理对象</span></div><div class="line">  <span class="comment">// method :调用的方法</span></div><div class="line">  <span class="comment">// args[] :参数数组  </span></div><div class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method,Object[] args)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
-<li>@Component + @ComponentScan / xml文件配置包扫描 ：通过组件扫描来发现 bean<ul>
-<li>@Component ： 组件(bean)的定义<ul>
-<li>语义:将被注解的类注册为一个bean，默认的 bean 的名为类名(第一个字母小写)</li>
-<li>@Component(“beanName”) 自定义 beanName</li>
-</ul>
-</li>
-<li>@ComponentScan 开启组件扫描<ul>
-<li>扫描当前类所在的包中的组件</li>
-<li>@ComponentScan(basePackages=”nameOfPackages”)/@ComponentScan(“nameOfPackages”) 指定扫描基础包,解决代码重构后,默认的扫描类位置的变动,而造成的扫描包的变动</li>
-</ul>
-</li>
-<li>使用 xml配置文件，通过标签&lt; context:component-scan basa-package = “nameOfPackages”&gt;同样能实现 @ComponentScan 注解的作用</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>xml 文件配置 bean</p>
+<li><p>JDK 通过反射动态代理的不足</p>
 <ul>
-<li>bean的配置文件同样需要遵循相关的规范,以 &lt; beans&gt; &lt; /beans&gt; 为根元素，类似于 @Configuration 的作用</li>
-<li>在&lt; bean&gt; &lt; /bean&gt; 显示配置相关的 bean</li>
+<li>只能对接口进行代理,而不能对实际的类进行代理</li>
 </ul>
 </li>
 </ul>
-<h4 id="bean的注入"><a href="#bean的注入" class="headerlink" title="bean的注入"></a>bean的注入</h4><ul>
-<li><p>显示配置完 bean 后,当 bean 初始化时,需要构造/初始化内部相关的引用属性，这个时候我们需要配置各个属性,为各个属性注入相关的引用,当然对于基本变量,这些就是由 spring 自动初始化的</p>
-</li>
-<li><p>通过 java 代码</p>
-<ul>
-<li>@Autowired (Spring中的注解)<ul>
-<li>按照 type 来注入</li>
-<li>required 属性:标注该注入的对象是否允许为 null</li>
-<li>@Qualifier(“beanName”) 限制注入的 bean 的名称，当按照 type 来注入的时候,有多个相同 type 的 bean 时,就会出现歧义,通过指定相关的 name(ID)消除这种歧义</li>
-</ul>
-</li>
-<li>@Resource （J2EE中的注解）<ul>
-<li>按照 name 来注入</li>
-<li>name 属性:限制注入的 bean 的名称(ID)</li>
+<h4 id="cglib-动态代理"><a href="#cglib-动态代理" class="headerlink" title="cglib 动态代理"></a>cglib 动态代理</h4><ul>
+<li>cglib 实现代理的原理<ul>
+<li>创建一个子类作为代理类，覆盖父类方法,实现方法调用的拦截</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>xml文件中指定<ul>
-<li>&lt; constructor-arg &gt; 元素</li>
-<li>c-命名空间</li>
-</ul>
-</li>
-</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Enhancer 类</span></div><div class="line">Enhancer enhancer = <span class="keyword">new</span> Enhancer();</div><div class="line"></div><div class="line"><span class="comment">// 设置父类(被代理的类)</span></div><div class="line">enhancer.setSuperclass(proxyObject.class);</div><div class="line"></div><div class="line"><span class="comment">// 设置回调函数</span></div><div class="line">enhancer.setCallback(<span class="keyword">new</span> MethodInterceptor());</div><div class="line"></div><div class="line"><span class="comment">// 创建实例</span></div><div class="line">Object proxyObject = enhancer.create()</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MethodInterceptor</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// 代理类调用时,都会转发到该方法中来</span></div><div class="line">  <span class="comment">// obj:CGLIB 动态生成的代理类的实例</span></div><div class="line">  <span class="comment">// Method ： 上下文中实体类调用的被代理类的方法(原始的方法)</span></div><div class="line">  <span class="comment">// args[] ： 方法参数</span></div><div class="line">  <span class="comment">// proxy ： 实际被代理类方法的代理引用,使用 MethodProxy 比使用 JDK 中 Method 效率上会有提升</span></div><div class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object obj, Method method, Object[] args,</span></span></div><div class="line">                            MethodProxy proxy);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -418,18 +385,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/13/Java中的反射/" rel="next" title="Java中的反射">
-                <i class="fa fa-chevron-left"></i> Java中的反射
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/28/Java并发工具类/" rel="prev" title="Java并发工具类">
-                Java并发工具类 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/05/20/spring整合Mybatis/" rel="prev" title="spring整合bean">
+                spring整合bean <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -541,7 +504,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#bean的定义"><span class="nav-number">1.</span> <span class="nav-text">bean的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bean的注入"><span class="nav-number">2.</span> <span class="nav-text">bean的注入</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#JDK动态代理"><span class="nav-number">1.</span> <span class="nav-text">JDK动态代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cglib-动态代理"><span class="nav-number">2.</span> <span class="nav-text">cglib 动态代理</span></a></li></ol></div>
             
 
           </div>

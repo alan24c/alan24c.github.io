@@ -194,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -204,7 +204,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -237,6 +237,153 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/Java中的代理模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/21/Java中的代理模式/" itemprop="url">
+                  Java中的代理模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-21T15:15:27+08:00">
+                2017-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h4><ul>
+<li><p>动态创建代理对象的 Class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 返回一个代理 Class 对象</span></div><div class="line">Clas proxyClass = Proxy.getProxyClass(ClassLoader loader,Class <span class="class"><span class="keyword">class</span>)</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成代理类的实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获取构造函数为 InvocationHandler.class 的构造器</span></div><div class="line">Constructor proxyClassConstructor =  Class.getConstructors(InvocationHandler.class);  </div><div class="line"></div><div class="line"><span class="comment">// 生成代理对象</span></div><div class="line">Object proxyObject = proxyClassConstructor.newInstance(<span class="keyword">new</span> InvocationHandler());</div></pre></td></tr></table></figure>
+</li>
+<li><p>接口 InvocationHandler</p>
+<ul>
+<li>InvocationHandler 是动态代理的核心,对代理对象的方法调用都会转发到 InvocationHandler::invoke() 方法中</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">InvocationHandler</span></span>&#123;</div><div class="line">  <span class="comment">// 交给实现类去实现，在这里拦截每一次对代理对象的调用,具体实现交给子类实现：或是仅仅转发到具体的实现类,亦或是实现相关方法的增强</span></div><div class="line">  <span class="comment">// proxy  :代理对象</span></div><div class="line">  <span class="comment">// method :调用的方法</span></div><div class="line">  <span class="comment">// args[] :参数数组  </span></div><div class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method,Object[] args)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>JDK 通过反射动态代理的不足</p>
+<ul>
+<li>只能对接口进行代理,而不能对实际的类进行代理</li>
+</ul>
+</li>
+</ul>
+<h4 id="cglib-动态代理"><a href="#cglib-动态代理" class="headerlink" title="cglib 动态代理"></a>cglib 动态代理</h4><ul>
+<li>cglib 实现代理的原理<ul>
+<li>创建一个子类作为代理类，覆盖父类方法,实现方法调用的拦截</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Enhancer 类</span></div><div class="line">Enhancer enhancer = <span class="keyword">new</span> Enhancer();</div><div class="line"></div><div class="line"><span class="comment">// 设置父类(被代理的类)</span></div><div class="line">enhancer.setSuperclass(proxyObject.class);</div><div class="line"></div><div class="line"><span class="comment">// 设置回调函数</span></div><div class="line">enhancer.setCallback(<span class="keyword">new</span> MethodInterceptor());</div><div class="line"></div><div class="line"><span class="comment">// 创建实例</span></div><div class="line">Object proxyObject = enhancer.create()</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MethodInterceptor</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// 代理类调用时,都会转发到该方法中来</span></div><div class="line">  <span class="comment">// obj:CGLIB 动态生成的代理类的实例</span></div><div class="line">  <span class="comment">// Method ： 上下文中实体类调用的被代理类的方法(原始的方法)</span></div><div class="line">  <span class="comment">// args[] ： 方法参数</span></div><div class="line">  <span class="comment">// proxy ： 实际被代理类方法的代理引用,使用 MethodProxy 比使用 JDK 中 Method 效率上会有提升</span></div><div class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object obj, Method method, Object[] args,</span></span></div><div class="line">                            MethodProxy proxy);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -284,7 +431,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-20T22:14:31+08:00">
                 2017-05-20
@@ -461,7 +608,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-19T23:02:32+08:00">
                 2017-05-19
@@ -724,7 +871,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-13T17:21:19+08:00">
                 2017-05-13
@@ -892,7 +1039,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-13T16:05:31+08:00">
                 2017-05-13
@@ -1072,7 +1219,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-28T00:01:46+08:00">
                 2017-04-28
@@ -1263,7 +1410,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-24T00:00:05+08:00">
                 2017-04-24
@@ -1607,7 +1754,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-18T00:54:19+08:00">
                 2017-04-18
@@ -1854,7 +2001,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T16:39:34+08:00">
                 2017-04-16
@@ -1985,7 +2132,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T00:35:49+08:00">
                 2017-04-16
@@ -2113,8 +2260,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">9</span>
-                <span class="site-state-item-name">posts</span>
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -2168,7 +2315,7 @@
 
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
