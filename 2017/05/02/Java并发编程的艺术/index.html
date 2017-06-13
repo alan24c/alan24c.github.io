@@ -87,12 +87,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2017/05/index.html">
+<meta name="description" content="Java内存模型Java的内存分类 堆 所有线程共享的内存区域,也是多线程下需要同步的内存块 堆上的变量,都属于引用变量(ref),单个线程中持有其引用(C中的指针)   栈 每个线程独享的内存区域,栈上的变量,属于值变量(value)只能当前线程访问到,无需进行同步    JMM(Java Memory Model)从抽象的角度来看,JMM 定义了两层次的内存  线程本地内存 存储该线程读/写共">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存模型">
+<meta property="og:url" content="http://yoursite.com/2017/05/02/Java并发编程的艺术/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java内存模型Java的内存分类 堆 所有线程共享的内存区域,也是多线程下需要同步的内存块 堆上的变量,都属于引用变量(ref),单个线程中持有其引用(C中的指针)   栈 每个线程独享的内存区域,栈上的变量,属于值变量(value)只能当前线程访问到,无需进行同步    JMM(Java Memory Model)从抽象的角度来看,JMM 定义了两层次的内存  线程本地内存 存储该线程读/写共">
+<meta property="og:updated_time" content="2017-06-13T16:20:39.518Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Java内存模型">
+<meta name="twitter:description" content="Java内存模型Java的内存分类 堆 所有线程共享的内存区域,也是多线程下需要同步的内存块 堆上的变量,都属于引用变量(ref),单个线程中持有其引用(C中的指针)   栈 每个线程独享的内存区域,栈上的变量,属于值变量(value)只能当前线程访问到,无需进行同步    JMM(Java Memory Model)从抽象的角度来看,JMM 定义了两层次的内存  线程本地内存 存储该线程读/写共">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2017/05/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/02/Java并发编程的艺术/"/>
 
 
 
 
 
-  <title> Archiv | Hexo </title>
+  <title> Java内存模型 | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -151,7 +156,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -235,325 +240,175 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      Öhm..! Insgesamt 15 Artikel. Bleib dran.
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/21/Java中的代理模式/" itemprop="url">
-              
-                <span itemprop="name">Java中的代理模式</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-21T15:15:27+08:00"
-              content="2017-05-21" >
-          05-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/20/spring整合bean/" itemprop="url">
-              
-                <span itemprop="name">spring整合Mybatis</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-20T22:14:31+08:00"
-              content="2017-05-20" >
-          05-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/20/spring整合Mybatis/" itemprop="url">
-              
-                <span itemprop="name">spring整合bean</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-20T22:14:31+08:00"
-              content="2017-05-20" >
-          05-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/19/Mysql中的事务/" itemprop="url">
-              
-                <span itemprop="name">Mysql中的事务</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-19T23:02:32+08:00"
-              content="2017-05-19" >
-          05-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/19/Mysql中的锁/" itemprop="url">
-              
-                <span itemprop="name">Mysql中的事务</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-19T23:02:32+08:00"
-              content="2017-05-19" >
-          05-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/13/Java中的反射/" itemprop="url">
-              
-                <span itemprop="name">Java中的反射</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-13T17:21:19+08:00"
-              content="2017-05-13" >
-          05-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/13/Spring中Bean的生成和定义/" itemprop="url">
-              
-                <span itemprop="name">Spring中Bean的生成和定义</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-13T16:05:31+08:00"
-              content="2017-05-13" >
-          05-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/02/Java并发编程的艺术/" itemprop="url">
-              
-                <span itemprop="name">Java内存模型</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-02T23:45:08+08:00"
-              content="2017-05-02" >
-          05-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/Java并发编程的艺术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java内存模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-02T23:45:08+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><h4 id="Java的内存分类"><a href="#Java的内存分类" class="headerlink" title="Java的内存分类"></a>Java的内存分类</h4><ul>
+<li>堆<ul>
+<li>所有线程共享的内存区域,也是多线程下需要同步的内存块</li>
+<li>堆上的变量,都属于引用变量(ref),单个线程中持有其引用(C中的指针)</li>
+</ul>
+</li>
+<li>栈<ul>
+<li>每个线程独享的内存区域,栈上的变量,属于值变量(value)只能当前线程访问到,无需进行同步</li>
+</ul>
+</li>
+</ul>
+<h4 id="JMM-Java-Memory-Model"><a href="#JMM-Java-Memory-Model" class="headerlink" title="JMM(Java Memory Model)"></a>JMM(Java Memory Model)</h4><p>从抽象的角度来看,JMM 定义了两层次的内存</p>
+<ul>
+<li>线程本地内存<ul>
+<li>存储该线程读/写共享变量的副本</li>
+</ul>
+</li>
+<li>主内存<ul>
+<li>存储线程之间的共享变量</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/13/Spring中Bean的生成和定义/" rel="next" title="Spring中Bean的生成和定义">
+                <i class="fa fa-chevron-left"></i> Spring中Bean的生成和定义
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/28/Java并发工具类/" rel="prev" title="Java并发工具类">
+                Java并发工具类 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -561,6 +416,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -580,8 +439,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -625,6 +493,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java内存模型"><span class="nav-number">1.</span> <span class="nav-text">Java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Java的内存分类"><span class="nav-number">1.1.</span> <span class="nav-text">Java的内存分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JMM-Java-Memory-Model"><span class="nav-number">1.2.</span> <span class="nav-text">JMM(Java Memory Model)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -734,11 +618,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
 
 
   

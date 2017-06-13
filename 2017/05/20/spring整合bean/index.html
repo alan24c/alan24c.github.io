@@ -90,13 +90,13 @@
 <meta name="description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring整合bean">
-<meta property="og:url" content="http://yoursite.com/2017/05/20/spring整合Mybatis/index.html">
+<meta property="og:title" content="spring整合Mybatis">
+<meta property="og:url" content="http://yoursite.com/2017/05/20/spring整合bean/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
-<meta property="og:updated_time" content="2017-05-20T14:44:32.600Z">
+<meta property="og:updated_time" content="2017-06-13T16:20:44.824Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="spring整合bean">
+<meta name="twitter:title" content="spring整合Mybatis">
 <meta name="twitter:description" content="配置 DAO 接口,映射到具体的 xml 文件 xml 文件中 &amp;lt; mapper namespace = “…”&amp;gt; &amp;lt; /mapper&amp;gt;标签 通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层 可以认为 xml 文件是 DAO 接口的一个实现类    1234package user.mapper;public interface UserDAO&amp;#">
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/20/spring整合Mybatis/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/20/spring整合bean/"/>
 
 
 
 
 
-  <title> spring整合bean | Hexo </title>
+  <title> spring整合Mybatis | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -250,7 +250,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/spring整合Mybatis/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/spring整合bean/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -271,7 +271,7 @@
             
             
               
-                spring整合bean
+                spring整合Mybatis
               
             
           </h1>
@@ -344,9 +344,9 @@
 <li>@Configuration 注解</li>
 </ul>
 <h5 id="相关配置类如下"><a href="#相关配置类如下" class="headerlink" title="相关配置类如下"></a>相关配置类如下</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@MaperScan</span>(value=<span class="string">"com.mapper"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Appconfig</span></span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="spring-中的配置文件"><a href="#spring-中的配置文件" class="headerlink" title="spring 中的配置文件"></a>spring 中的配置文件</h3><h5 id="配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><a href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource" class="headerlink" title="配置数据库连接池，使用 spring 中的 DriverManagerDataSource"></a>配置数据库连接池，使用 spring 中的 DriverManagerDataSource</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driverClassName&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="spring-中的配置文件"><a href="#spring-中的配置文件" class="headerlink" title="spring 中的配置文件"></a>spring 中的配置文件</h3><h5 id="配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><a href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource" class="headerlink" title="配置数据库连接池，使用 spring 中的 DriverManagerDataSource"></a>配置数据库连接池，使用 spring 中的 DriverManagerDataSource</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driverClassName&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
 <h5 id="配置-session-工厂"><a href="#配置-session-工厂" class="headerlink" title="配置 session 工厂"></a>配置 session 工厂</h5><p>SqlSessionFactoryBean 实现了 FactoryBean，所以最终创建的 bean 不是 SqlSessionFactoryBean 本身,e而是工厂类下 getObject() 返回的方法的结果.<br>不需要显示的使用 SqlSessionFactoryBean，相反 getObject() 返回的 session 会被注入到 MapperFactoryBean(即上述通过 @MaperScan 注解生成的 bean) 和实现了 SqlSessionDaoSupport 的 DAO 对象层去。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeAliasesPackage"</span> <span class="attr">value</span>=<span class="string">"mybatisDomain"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeHandlersPackage"</span> <span class="attr">value</span>=<span class="string">"typehandlers"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperLocations"</span> <span class="attr">value</span>=<span class="string">"classpath*:mappers/*.xml"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeAliasesPackage"</span> <span class="attr">value</span>=<span class="string">"mybatisDomain"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeHandlersPackage"</span> <span class="attr">value</span>=<span class="string">"typehandlers"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperLocations"</span> <span class="attr">value</span>=<span class="string">"classpath*:mappers/*.xml"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
 <ul>
 <li>指定 XML mapper 文件的位置<ul>
 <li>在 sqlSessionFactory 中通过属性 mapperLocations 来指定</li>
@@ -354,31 +354,7 @@
 </ul>
 </li>
 </ul>
-<h5 id="配置-session-模板"><a href="#配置-session-模板" class="headerlink" title="配置 session 模板"></a>配置 session 模板</h5><p>使用 SqlSessionFactoryBean 来生成 session 模板<br>通过往 SqlSessionTemplate 中的构造函数中，传入(第一个参数位置)sqlSessionFactory，来生成 sqlSession</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span> = <span class="string">"sqlSession"</span> <span class="attr">class</span> = <span class="string">"org.mybatis.spring.SqlSessionTemplate"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span> = <span class="string">"0"</span>,<span class="attr">ref</span> = <span class="string">"sqlSessionFactory"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
-<h5 id="使用-session-模板来完数据库操作"><a href="#使用-session-模板来完数据库操作" class="headerlink" title="使用 session 模板来完数据库操作"></a>使用 session 模板来完数据库操作</h5><ul>
-<li><p>隐式使用</p>
-<ul>
-<li>当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</li>
-</ul>
-</li>
-<li><p>显示使用</p>
-</li>
-</ul>
-<h6 id="显示注入-DAO-层"><a href="#显示注入-DAO-层" class="headerlink" title="显示注入 DAO 层"></a>显示注入 DAO 层</h6><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.sample.dao.UserDaoImpl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSession"</span> <span class="attr">ref</span>=<span class="string">"sqlSession"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
-<h6 id="显示调用-sqlSession"><a href="#显示调用-sqlSession" class="headerlink" title="显示调用 sqlSession"></a>显示调用 sqlSession</h6><pre><code class="java"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span> </span>{
-
-  <span class="keyword">private</span> SqlSession sqlSession;
-
-  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSqlSession</span><span class="params">(SqlSession sqlSession)</span> </span>{
-    <span class="keyword">this</span>.sqlSession = sqlSession;
-  }
-
-  <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(String userId)</span> </span>{
-    <span class="keyword">return</span> (User) sqlSession.selectOne(<span class="string">"org.mybatis.spring.sample.mapper.UserMapper.getUser"</span>, userId);
-  }
-}
-</code></pre>
+<h5 id="配置-session-模板"><a href="#配置-session-模板" class="headerlink" title="配置 session 模板"></a>配置 session 模板</h5><p>使用 SqlSessionFactoryBean 来生成 session 模板<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSession"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionTemplate"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">ref</span>=<span class="string">"sqlSessionFactory"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line">```  </div><div class="line"></div><div class="line">##### 使用 session 模板来完数据库操作</div><div class="line">- 隐式使用</div><div class="line">  - 当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</div><div class="line"></div><div class="line">- 显示使用</div><div class="line">  - 显示注入 DAO 层</div><div class="line">  - 显示调用 sqlSession</div><div class="line"></div><div class="line">```java</div><div class="line">public class UserDaoImpl implements UserDao &#123;</div><div class="line"></div><div class="line">  private SqlSession sqlSession;</div><div class="line"></div><div class="line">  public void setSqlSession(SqlSession sqlSession) &#123;</div><div class="line">    this.sqlSession = sqlSession;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public User getUser(String userId) &#123;</div><div class="line">    return (User) sqlSession.selectOne("org.mybatis.spring.sample.mapper.UserMapper.getUser", userId);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">```  </div><div class="line">```xml</div><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.sample.dao.UserDaoImpl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSession"</span> <span class="attr">ref</span>=<span class="string">"sqlSession"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -415,8 +391,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/20/spring整合bean/" rel="next" title="spring整合Mybatis">
-                <i class="fa fa-chevron-left"></i> spring整合Mybatis
+              <a href="/2017/05/21/Java中的代理模式/" rel="next" title="Java中的代理模式">
+                <i class="fa fa-chevron-left"></i> Java中的代理模式
               </a>
             
           </div>
@@ -425,8 +401,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/05/19/Mysql中的锁/" rel="prev" title="Mysql中的事务">
-                Mysql中的事务 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/05/20/spring整合Mybatis/" rel="prev" title="spring整合bean">
+                spring整合bean <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -538,7 +514,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-DAO-接口-映射到具体的-xml-文件"><span class="nav-number">1.</span> <span class="nav-text">配置 DAO 接口,映射到具体的 xml 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-mapper-接口-使其动态生成-bean"><span class="nav-number">2.</span> <span class="nav-text">配置 mapper 接口,使其动态生成 bean</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#生成-mapper-接口代理"><span class="nav-number">2.0.1.</span> <span class="nav-text">生成 mapper 接口代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将上述配置类生成-bean-加载到-spring-中"><span class="nav-number">2.0.2.</span> <span class="nav-text">将上述配置类生成 bean,加载到 spring 中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关配置类如下"><span class="nav-number">2.0.3.</span> <span class="nav-text">相关配置类如下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-中的配置文件"><span class="nav-number">3.</span> <span class="nav-text">spring 中的配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><span class="nav-number">3.0.1.</span> <span class="nav-text">配置数据库连接池，使用 spring 中的 DriverManagerDataSource</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-工厂"><span class="nav-number">3.0.2.</span> <span class="nav-text">配置 session 工厂</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-模板"><span class="nav-number">3.0.3.</span> <span class="nav-text">配置 session 模板</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用-session-模板来完数据库操作"><span class="nav-number">3.0.4.</span> <span class="nav-text">使用 session 模板来完数据库操作</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#显示注入-DAO-层"><span class="nav-number">3.0.4.1.</span> <span class="nav-text">显示注入 DAO 层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#显示调用-sqlSession"><span class="nav-number">3.0.4.2.</span> <span class="nav-text">显示调用 sqlSession</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-DAO-接口-映射到具体的-xml-文件"><span class="nav-number">1.</span> <span class="nav-text">配置 DAO 接口,映射到具体的 xml 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-mapper-接口-使其动态生成-bean"><span class="nav-number">2.</span> <span class="nav-text">配置 mapper 接口,使其动态生成 bean</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#生成-mapper-接口代理"><span class="nav-number">2.0.1.</span> <span class="nav-text">生成 mapper 接口代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将上述配置类生成-bean-加载到-spring-中"><span class="nav-number">2.0.2.</span> <span class="nav-text">将上述配置类生成 bean,加载到 spring 中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关配置类如下"><span class="nav-number">2.0.3.</span> <span class="nav-text">相关配置类如下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-中的配置文件"><span class="nav-number">3.</span> <span class="nav-text">spring 中的配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><span class="nav-number">3.0.1.</span> <span class="nav-text">配置数据库连接池，使用 spring 中的 DriverManagerDataSource</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-工厂"><span class="nav-number">3.0.2.</span> <span class="nav-text">配置 session 工厂</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-session-模板"><span class="nav-number">3.0.3.</span> <span class="nav-text">配置 session 模板</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

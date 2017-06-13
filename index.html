@@ -247,6 +247,297 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/14/Java内存模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/14/Java内存模型/" itemprop="url">
+                  Java内存模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-14T00:21:08+08:00">
+                2017-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Java内存模型-JMM"><a href="#Java内存模型-JMM" class="headerlink" title="Java内存模型(JMM)"></a>Java内存模型(JMM)</h4><h5 id="Java内存模型解决的问题"><a href="#Java内存模型解决的问题" class="headerlink" title="Java内存模型解决的问题"></a>Java内存模型解决的问题</h5><ul>
+<li>JMM主要解决的是共享变量何时可见的问题<ul>
+<li>JMM抽象出两种内存<ul>
+<li>本地内存</li>
+<li>主内存</li>
+</ul>
+</li>
+<li>共享变量存在于主内存中,每个线程的本地内存保存着共享变量的读写副本</li>
+</ul>
+</li>
+<li>多线程环境下,一个普通变量的读和写可能在不同线程中进行,由于(编译期间或者指令运行期间的)重排序,可能会引起变量的读写顺序不定，重而导致了变量的不可见问题<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> flag;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> nums;</div><div class="line"></div><div class="line">  <span class="comment">// thread_1</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">()</span></span>&#123;</div><div class="line">    flag = <span class="keyword">true</span>;         <span class="comment">// (1) 写</span></div><div class="line">    nums = <span class="number">5</span>;            <span class="comment">// (2) 写</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// thread_2</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> a = <span class="number">0</span>;               </div><div class="line">    <span class="keyword">if</span>(<span class="keyword">true</span> == flag)&#123;           <span class="comment">// (3) 读   </span></div><div class="line">      a = nums * nums;          <span class="comment">// (4) 读    </span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//可能的执行顺序：（1）（3）（4）（2）</span></div><div class="line"><span class="comment">//           ： （3）（1）（4）（2）</span></div><div class="line"><span class="comment">// 单个线程来看：是顺序执行的，(1)总在(2)前,（3）总在(4)前</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="重排序引起变量可见性"><a href="#重排序引起变量可见性" class="headerlink" title="重排序引起变量可见性"></a>重排序引起变量可见性</h5><ul>
+<li>重排序<ul>
+<li>编译器优化导致重排序<ul>
+<li>JMM 通过禁止特定类型的重排序,控制编译器生成代码</li>
+</ul>
+</li>
+<li>CPU多级流水线指令的并行运行导致重排序<ul>
+<li>JMM 通过在编译时插入内存屏障指令禁止并行运行时的重排序</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据依赖性</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写后读</td>
+<td>a = 1; b = a</td>
+</tr>
+<tr>
+<td>读后写</td>
+<td>a = b; b = 1</td>
+</tr>
+<tr>
+<td>写后写</td>
+<td>a = 1; a = 2</td>
+</tr>
+</tbody>
+</table>
+<p>上述 3 种情况不论是编译器重排序或者是执行时重排序后,都会引起数据不一致性</p>
+<h5 id="变量不及时刷新回缓存引起变量的可见性"><a href="#变量不及时刷新回缓存引起变量的可见性" class="headerlink" title="变量不及时刷新回缓存引起变量的可见性"></a>变量不及时刷新回缓存引起变量的可见性</h5><ul>
+<li>内存屏障指令会强制将CPU缓存中的变量刷新回缓存</li>
+</ul>
+<h5 id="JMM内存模型"><a href="#JMM内存模型" class="headerlink" title="JMM内存模型"></a>JMM内存模型</h5><ul>
+<li><p>两个重要的语义</p>
+<ul>
+<li>happens-before<ul>
+<li>volatile 变量: volatile 变量的写 happens-before 读</li>
+<li>lock: lock 的解锁 happens-before 加锁</li>
+</ul>
+</li>
+<li>as-if-serial<ul>
+<li>对于存在数据依赖性的操作,不论是编译器还是处理器都不会对这些操作进行重排序</li>
+<li>表现形式：程序在单线程情况下,是顺序执行的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>多线程情况下 as-if-serial 语义失效</p>
+<ul>
+<li>todo…code</li>
+</ul>
+</li>
+</ul>
+<h5 id="内存屏障指令"><a href="#内存屏障指令" class="headerlink" title="内存屏障指令"></a>内存屏障指令</h5><table>
+<thead>
+<tr>
+<th>指令名称</th>
+<th>指令例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LoadLoad Barriers</td>
+<td>Load1 LoadLoad Load2</td>
+</tr>
+<tr>
+<td>StoreStore Barriers</td>
+<td>Store1 StoreStore Store2</td>
+</tr>
+<tr>
+<td>LoadStore Barriers</td>
+<td>Load1 LoadStore Store1</td>
+</tr>
+<tr>
+<td>StoreLoad Barriers</td>
+<td>Store1 StoreLoad Load1</td>
+</tr>
+</tbody>
+</table>
+<h5 id="volatile-语义"><a href="#volatile-语义" class="headerlink" title="volatile 语义"></a>volatile 语义</h5><p>读线程B 读取一个 volatile 变量后,写线程A在写这个 volatile 变量之前所有的共享变量操作都将对读线程B可见。</p>
+<table>
+<thead>
+<tr>
+<th>read操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>volatile 读</td>
+</tr>
+<tr>
+<td>LoadLoad 指令</td>
+</tr>
+<tr>
+<td>LoadStore 指令</td>
+</tr>
+<tr>
+<td>普通变量读</td>
+</tr>
+<tr>
+<td>普通变量写</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>write操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>StoreStore 指令</td>
+</tr>
+<tr>
+<td>volatile 写</td>
+</tr>
+<tr>
+<td>StoreLoad 指令</td>
+</tr>
+<tr>
+<td>普通变量读</td>
+</tr>
+</tbody>
+</table>
+<h5 id="final-语义"><a href="#final-语义" class="headerlink" title="final 语义"></a>final 语义</h5><p>final 变量都会在构造函数中被完整初始化，通过构造函数对 final 变量的读取得到都都是完整的对象</p>
+<ul>
+<li>构造函数内对一个 final 变量的写入，与随后把这个 final 的引用赋值给别的变量之间不能重排序<ul>
+<li>保证 final 变量在被引用之前已经构造完毕,不会被重排序到构造函数之外初始化,普通变量不具备这个保证</li>
+</ul>
+</li>
+<li>初次读取一个包含 final 域的引用的对象,与随后读取这个 final 域,这两个操作不能重排序<ul>
+<li>保证读取一个 final 变量的引用之前会首先读取这个 final 变量的对象引用，普通变量不具备这个保证,可能会首先读取这个普通变量,而后读取包含这个普通变量的对象的引用，此时这个普通变量可能没有被初始化</li>
+</ul>
+</li>
+<li>构造函数内对 final 引用对象的写入,与随后把这个 final 变量的引用赋值给别的变量之间不能重排序<ul>
+<li>保证 final 引用对象在构造函数中被完整构造</li>
+</ul>
+</li>
+</ul>
+<h5 id="类初始化的语义"><a href="#类初始化的语义" class="headerlink" title="类初始化的语义"></a>类初始化的语义</h5><p>类初始化期间，JVM会获取一个锁,同步多个线程对同一个类的初始化</p>
+<ul>
+<li>类的初始化<br>一个类或者接口类型T被立即初始化<ul>
+<li>类被显示初始化</li>
+<li>类中的静态方法被调用</li>
+<li>T 中一个静态字段被赋值</li>
+<li>T 中一个静态字段被使用,且该静态字段不是一个常量</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/Java中的代理模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -351,6 +642,159 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Enhancer 类</span></div><div class="line">Enhancer enhancer = <span class="keyword">new</span> Enhancer();</div><div class="line"></div><div class="line"><span class="comment">// 设置父类(被代理的类)</span></div><div class="line">enhancer.setSuperclass(proxyObject.class);</div><div class="line"></div><div class="line"><span class="comment">// 设置回调函数</span></div><div class="line">enhancer.setCallback(<span class="keyword">new</span> MethodInterceptor());</div><div class="line"></div><div class="line"><span class="comment">// 创建实例</span></div><div class="line">Object proxyObject = enhancer.create()</div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MethodInterceptor</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// 代理类调用时,都会转发到该方法中来</span></div><div class="line">  <span class="comment">// obj:CGLIB 动态生成的代理类的实例</span></div><div class="line">  <span class="comment">// Method ： 上下文中实体类调用的被代理类的方法(原始的方法)</span></div><div class="line">  <span class="comment">// args[] ： 方法参数</span></div><div class="line">  <span class="comment">// proxy ： 实际被代理类方法的代理引用,使用 MethodProxy 比使用 JDK 中 Method 效率上会有提升</span></div><div class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object obj, Method method, Object[] args,</span></span></div><div class="line">                            MethodProxy proxy);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/spring整合bean/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/20/spring整合bean/" itemprop="url">
+                  spring整合Mybatis
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-20T22:14:31+08:00">
+                2017-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="配置-DAO-接口-映射到具体的-xml-文件"><a href="#配置-DAO-接口-映射到具体的-xml-文件" class="headerlink" title="配置 DAO 接口,映射到具体的 xml 文件"></a>配置 DAO 接口,映射到具体的 xml 文件</h3><ul>
+<li>xml 文件中 &lt; mapper namespace = “…”&gt; &lt; /mapper&gt;标签<ul>
+<li>通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层</li>
+<li>可以认为 xml 文件是 DAO 接口的一个实现类</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> user.mapper;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDAO</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span> = <span class="string">"user.mapper.UserDAO"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span> = <span class="string">updateUser</span> <span class="attr">...</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">update</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="配置-mapper-接口-使其动态生成-bean"><a href="#配置-mapper-接口-使其动态生成-bean" class="headerlink" title="配置 mapper 接口,使其动态生成 bean"></a>配置 mapper 接口,使其动态生成 bean</h3><h5 id="生成-mapper-接口代理"><a href="#生成-mapper-接口代理" class="headerlink" title="生成 mapper 接口代理"></a>生成 mapper 接口代理</h5><p>使用 mybatis时，一般定义 mapper 接口,但是 interface 接口类型不能直接在 spring 注册为 bean,使用 @MapperScan 注解来配置 mapper 接口,生成相应的 bean</p>
+<ul>
+<li>@MapperScan(value=”…”)<ul>
+<li>使用 value 属性配置 mapper 文件的包</li>
+<li>将自动扫描 mapper 接口,生成代理注入到 Spring 中去</li>
+</ul>
+</li>
+</ul>
+<h5 id="将上述配置类生成-bean-加载到-spring-中"><a href="#将上述配置类生成-bean-加载到-spring-中" class="headerlink" title="将上述配置类生成 bean,加载到 spring 中"></a>将上述配置类生成 bean,加载到 spring 中</h5><ul>
+<li>使用组件扫描将上述配置类注入到 spring 中去</li>
+<li>@Configuration 注解</li>
+</ul>
+<h5 id="相关配置类如下"><a href="#相关配置类如下" class="headerlink" title="相关配置类如下"></a>相关配置类如下</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@MaperScan</span>(value=<span class="string">"com.mapper"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Appconfig</span></span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="spring-中的配置文件"><a href="#spring-中的配置文件" class="headerlink" title="spring 中的配置文件"></a>spring 中的配置文件</h3><h5 id="配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><a href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource" class="headerlink" title="配置数据库连接池，使用 spring 中的 DriverManagerDataSource"></a>配置数据库连接池，使用 spring 中的 DriverManagerDataSource</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driverClassName&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="配置-session-工厂"><a href="#配置-session-工厂" class="headerlink" title="配置 session 工厂"></a>配置 session 工厂</h5><p>SqlSessionFactoryBean 实现了 FactoryBean，所以最终创建的 bean 不是 SqlSessionFactoryBean 本身,e而是工厂类下 getObject() 返回的方法的结果.<br>不需要显示的使用 SqlSessionFactoryBean，相反 getObject() 返回的 session 会被注入到 MapperFactoryBean(即上述通过 @MaperScan 注解生成的 bean) 和实现了 SqlSessionDaoSupport 的 DAO 对象层去。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeAliasesPackage"</span> <span class="attr">value</span>=<span class="string">"mybatisDomain"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeHandlersPackage"</span> <span class="attr">value</span>=<span class="string">"typehandlers"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperLocations"</span> <span class="attr">value</span>=<span class="string">"classpath*:mappers/*.xml"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>指定 XML mapper 文件的位置<ul>
+<li>在 sqlSessionFactory 中通过属性 mapperLocations 来指定</li>
+<li>在 MyBatis 配置文件中通过 <mappers> 标签来指定.</mappers></li>
+</ul>
+</li>
+</ul>
+<h5 id="配置-session-模板"><a href="#配置-session-模板" class="headerlink" title="配置 session 模板"></a>配置 session 模板</h5><p>使用 SqlSessionFactoryBean 来生成 session 模板<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSession"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionTemplate"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">ref</span>=<span class="string">"sqlSessionFactory"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line">```  </div><div class="line"></div><div class="line">##### 使用 session 模板来完数据库操作</div><div class="line">- 隐式使用</div><div class="line">  - 当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</div><div class="line"></div><div class="line">- 显示使用</div><div class="line">  - 显示注入 DAO 层</div><div class="line">  - 显示调用 sqlSession</div><div class="line"></div><div class="line">```java</div><div class="line">public class UserDaoImpl implements UserDao &#123;</div><div class="line"></div><div class="line">  private SqlSession sqlSession;</div><div class="line"></div><div class="line">  public void setSqlSession(SqlSession sqlSession) &#123;</div><div class="line">    this.sqlSession = sqlSession;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public User getUser(String userId) &#123;</div><div class="line">    return (User) sqlSession.selectOne("org.mybatis.spring.sample.mapper.UserMapper.getUser", userId);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">```  </div><div class="line">```xml</div><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.sample.dao.UserDaoImpl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSession"</span> <span class="attr">ref</span>=<span class="string">"sqlSession"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure></p>
 
           
         
@@ -834,6 +1278,189 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/Mysql中的锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/19/Mysql中的锁/" itemprop="url">
+                  Mysql中的事务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-19T23:02:32+08:00">
+                2017-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>什么是事务？</p>
+<ul>
+<li>事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。</li>
+</ul>
+<p>事务的ACID特性</p>
+<ul>
+<li>A：Atomic，原子性  </li>
+<li>C：Consistency,一致性</li>
+<li>I：Isolation,隔离性</li>
+<li>D：Durability,持久性</li>
+</ul>
+<p>事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sql 语句要么全部执行成功,若事务中有一条语句执行失败,则全部回滚，保证事务的原子性;同时保证了数据库中数据的一致性,不会出现事务进行过程中的一个中间状态;commit(提交)后的事务,则永久存储在数据库中了，即持久性。</p>
+<h5 id="事务的一致性"><a href="#事务的一致性" class="headerlink" title="事务的一致性"></a>事务的一致性</h5><ul>
+<li>事务的隔离级别<ul>
+<li>read uncommitted<ul>
+<li>并发情况下,所有的事务都能看到其它事务未提交的结果</li>
+</ul>
+</li>
+<li>read committed<ul>
+<li>并发情况下,所有的事务只能看到其它事务以提交的结果</li>
+<li>这种隔离级别下会出现不可重复读的现象,即,并发情况下,由于其它事务提交了数据的变更，造成了同一个事务,多次读取相同数据时,可能会得到不一样的结果。这违反了事务的隔离性。</li>
+</ul>
+</li>
+<li>repeatable read (mysql 默认的隔离级别)<ul>
+<li>并发情况下,同一个事务中，多次读取相同数据时,会得到同样的结果。</li>
+</ul>
+</li>
+<li>serializable<ul>
+<li>串行化读,对数据没有竞争关系</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h5><ul>
+<li>使用 MVCC(多版本并发控制)来解决并发条件下,读数据时，不采用等待写锁释放的条件下,对读与写操作的控制<ul>
+<li>如果读的某行数据正在被更改,那么该读取操作不会等待该行上锁的释放，而是去读取行的一个快照(snap)信息。</li>
+<li>快照版本的选取<ul>
+<li>read committed 隔离级别下，选取锁定行的最新的一个快照信息  –&gt; 不可重复读的现象</li>
+<li>repeatable read 隔离级别下,选取锁定行的事务开始前的行的版本信息 –&gt; 可重复读</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="一致性锁定读"><a href="#一致性锁定读" class="headerlink" title="一致性锁定读"></a>一致性锁定读</h5><ul>
+<li>读取数据时,显示对数据库进行加锁,用以保证数据逻辑的一致性<ul>
+<li>行锁的3种算法<ul>
+<li>Record Lock :单行上锁</li>
+<li>Gap Lock: 间隙锁</li>
+<li>Next-key Lock (Record Lock + Gap Lock)<ul>
+<li>使用 Next-key Lock 解决幻读现象：同一事务下,连续两次同样的SQL语句,可能导致不同的结果,第二次的 SQL 可能会返回之前不存在的行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="幻读，可-不可重复读"><a href="#幻读，可-不可重复读" class="headerlink" title="幻读，可/不可重复读"></a>幻读，可/不可重复读</h5><ul>
+<li>幻读：整个表结构而言,整个表结构可能在某个事务进行过程中被更改(数据行的增/删)</li>
+<li>可/不可重复读: 对单行数据而言,读取的单行数据的快照版本信息的不同</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/Java中的反射/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1182,6 +1809,148 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/Java并发编程的艺术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/02/Java并发编程的艺术/" itemprop="url">
+                  Java内存模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-02T23:45:08+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><h4 id="Java的内存分类"><a href="#Java的内存分类" class="headerlink" title="Java的内存分类"></a>Java的内存分类</h4><ul>
+<li>堆<ul>
+<li>所有线程共享的内存区域,也是多线程下需要同步的内存块</li>
+<li>堆上的变量,都属于引用变量(ref),单个线程中持有其引用(C中的指针)</li>
+</ul>
+</li>
+<li>栈<ul>
+<li>每个线程独享的内存区域,栈上的变量,属于值变量(value)只能当前线程访问到,无需进行同步</li>
+</ul>
+</li>
+</ul>
+<h4 id="JMM-Java-Memory-Model"><a href="#JMM-Java-Memory-Model" class="headerlink" title="JMM(Java Memory Model)"></a>JMM(Java Memory Model)</h4><p>从抽象的角度来看,JMM 定义了两层次的内存</p>
+<ul>
+<li>线程本地内存<ul>
+<li>存储该线程读/写共享变量的副本</li>
+</ul>
+</li>
+<li>主内存<ul>
+<li>存储线程之间的共享变量</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/28/Java并发工具类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1303,9 +2072,14 @@
 </li>
 </ul>
 <h3 id="任务的结果"><a href="#任务的结果" class="headerlink" title="任务的结果"></a>任务的结果</h3><ul>
-<li>Callable 与 Future<ul>
+<li>interface::Future<ul>
+<li>表示异步计算的结果</li>
+</ul>
+</li>
+<li>Callable 与 Runnable<ul>
 <li>interface:: Callable<t><ul>
 <li>T call() throw Exception</li>
+<li>可以返回结果<br>-</li>
 </ul>
 </t></li>
 </ul>
@@ -1320,7 +2094,13 @@
 <li>轮询锁</li>
 <li>定时锁</li>
 <li>可中断锁获取操作</li>
-<li>读写锁</li>
+<li>读写锁<ul>
+<li>Lock 与 Synchronized 的区别<ul>
+<li>Synchronized 会隐示的获取锁,但是它将锁的获取和释放给固化了，没有显示获取锁和释放锁灵活</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>原子变量<ul>
@@ -1364,860 +2144,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/24/Java并发编程实战/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/24/Java并发编程实战/" itemprop="url">
-                  Java并发编程实战
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-24T00:00:05+08:00">
-                2017-04-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="并发条件下的线程安全"><a href="#并发条件下的线程安全" class="headerlink" title="并发条件下的线程安全"></a>并发条件下的线程安全</h3><ul>
-<li><p>竞态条件</p>
-<ul>
-<li>定义：多个线程执行顺序不同时,而得到不同的结果<ul>
-<li>最常见的是延迟初始化，先检查再初始化对象</li>
-<li>以及 ++value 操作<ul>
-<li>a:从内存中读取 value 的值</li>
-<li>b:在 cpu 中进行 value 的值加1</li>
-<li>c:从 cpu 中往内存中更新 value 的值</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>竞态条件,是由于多线程环境环境下,共享的某些逻辑块,因为不是原子操作,而在单个线程中会出现状态的不同,进而影响了整个结果</li>
-</ul>
-</li>
-<li><p>复合操作</p>
-<ul>
-<li>解决竟态条件,是把共享的逻辑,变成原子操作,使得这些逻辑执行过程中不会被多线程的调度机制打断,只会在某一个线程中完整的执行完整</li>
-<li>复合操作：多个原子操作组合的情况下,仍然不能保证线程安全性,多个原子操作过程中,仍然有竞态条件：最终结果仍然依赖于各个原子操作的配合.</li>
-</ul>
-</li>
-<li><p>多线程安全</p>
-<ul>
-<li>保护竟态条件下,多个连续的逻辑,以原子(不可再分割)的方式执行，一旦逻辑开始,就会执行结束,中间不会被线程调度机制打断,更加没有 context(上下文)</li>
-</ul>
-</li>
-<li><p>原子性的支持</p>
-<ul>
-<li>代码块同步 Synchronized (用锁来保护状态)<ul>
-<li>内置锁/监视器锁</li>
-<li>同步代码块的两个部分<ul>
-<li>锁对象的引用</li>
-<li>被 Synchronized 保护的代码块</li>
-</ul>
-</li>
-<li>同步方法<ul>
-<li>只要在方法名前加上 Synchronized 就可以</li>
-</ul>
-</li>
-<li>可重入：保证了子类的方法可以调用父类的方法,而不会产生死锁<ul>
-<li>每个锁关联了使用线程和计数器</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="共享对象"><a href="#共享对象" class="headerlink" title="共享对象"></a>共享对象</h3><ul>
-<li>对象的可见性<ul>
-<li>重排序<ul>
-<li>没有进行同步的情况下,编译器和处理器在编译和运行时,可以对执行的顺序进行调整，以适应 cpu 的多级流水操作(乱序执行)</li>
-</ul>
-</li>
-<li>失效数据<ul>
-<li>没有同步的情况下,共享变量并发读和写时,某一时刻,读到数据可能是旧的数据,此时新的值在 cpu 寄存器中,还没有来的及写回内存中去。</li>
-<li>同步原语会保证,用户设置的 new value 被写回内存中时,不会让另外的线程读操作</li>
-</ul>
-</li>
-<li>非原子的 64 位操作<ul>
-<li>long 和 double 类型的 64 位数据,读和写可能被分成两个 32 bit 的操作,这样并发的读写时,会出现读到某个值的32 bit和另外一个值的低32 bit</li>
-<li>使用 volatile 或者 lock 来同步操作</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>可见性与锁及 volatile 变量<ul>
-<li>对于同一个锁,某个线程获取后,可以完整看到上一个获取到同一个锁的线程的所有操作结果,这就是变量的可见性.这是因为上一个获取锁的线程,实现了所有的同步操作,释放锁后,该锁才能被当前线程获取</li>
-<li>volatile 变量<ul>
-<li>访问(get) volatile 变量时,不会加锁,即不会阻塞线程</li>
-<li>写入 volatile 变量相当于退出同步块,读取时,相当于进入同步块</li>
-<li>volatile 变量的可见性,是当 volatile 变量写入时,cpu 会强制更新内存中的值,而非 cache 中的值。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="对象的发布与逃逸"><a href="#对象的发布与逃逸" class="headerlink" title="对象的发布与逃逸"></a>对象的发布与逃逸</h3><ul>
-<li>对象的发布<ul>
-<li>使得对象在当前代码作用域外也能够被使用<ul>
-<li>发布对象的引用</li>
-<li>发布对象的内部状态</li>
-<li>隐式发布 this 引用<ul>
-<li>使用内部类时，(构造函数中开辟一个新线程时,这种情况也是属于内部类)内部类可以隐式引用外部类的 this 引用， 当外部类的构造函数还是运行时，通过内部类的 this 引用会指向一个没有构造完成的外部类.</li>
-<li>使用工厂方法,将外部类的构造方法进行 private 保护,只能通过工厂方法获取类的实例,这样在工厂方法中,可以保证外部类的正确构造完成</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>线程封闭<ul>
-<li>将数据的作用域范围封闭在单个线程中,这样退化到了单线程的模型了</li>
-<li>volatile 线程封闭<ul>
-<li>将 volatile 的 write 操作封闭在某个线程中,防止竞态的产生</li>
-<li>volatile 的多线程并发 read,始终能够读到最新的值</li>
-</ul>
-</li>
-<li>栈封闭<ul>
-<li>使用基本类型的局部变量,能够保证任何方法都无法获取其引用</li>
-</ul>
-</li>
-<li>ThreadLocal 类<ul>
-<li>ThreadLocal 类将发生竞态的共享变量复制一份，保存到本地线程中,实现线程封闭</li>
-<li>相对于锁,ThreadLocal 是一种典型的用空间换时间的策略</li>
-<li><h2 id="todo-ThreadLocal-的适用场景"><a href="#todo-ThreadLocal-的适用场景" class="headerlink" title="todo:ThreadLocal 的适用场景"></a>todo:ThreadLocal 的适用场景</h2></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="对象的组合"><a href="#对象的组合" class="headerlink" title="对象的组合"></a>对象的组合</h3><ul>
-<li>目的:实现线程安全的类</li>
-<li>收集依赖的状态<ul>
-<li>各种对象之间的组合,造成了对象状态的增加,线程安全的组合,需要整体上状态的的一致性</li>
-<li>线程安全：保证各个状态的同步策略</li>
-</ul>
-</li>
-<li>实例封闭<ul>
-<li>Java监视器模式<ul>
-<li>Java 虚拟机中,每个 Object 或者 Class 都通过相应的逻辑关联到一个监视器上<ul>
-<li>可以通过 Synchronized 关联到对象的监视器上</li>
-</ul>
-</li>
-<li>使用 Class 中的内置私有的锁对象(监视器)来实现同步<ul>
-<li>相对于其它通过共有方式能够访问的锁对象,无需参与到其它代码作用域的同步策略中去</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>线程安全委托<ul>
-<li>对象之间的状态的同步,可以一些线程安全的状态来替换<ul>
-<li>普通集合 -&gt; 线程安全的集合</li>
-<li>普通变量 -&gt; 不可变的变量(final)<ul>
-<li>可以任意发布不可变变量</li>
-</ul>
-</li>
-<li>发布变量的引用 -&gt; 发布变量的视图<ul>
-<li>不希望外部线程来改变该变量</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>委托失效<ul>
-<li>单个变量虽然是线程安全,但是单个线程安全的变量组合成的对象,不一定是线程安全的</li>
-</ul>
-</li>
-<li><h2 id="todo：构造函数捕获模式"><a href="#todo：构造函数捕获模式" class="headerlink" title="todo：构造函数捕获模式"></a>todo：构造函数捕获模式</h2></li>
-</ul>
-</li>
-</ul>
-<h3 id="同步容器类"><a href="#同步容器类" class="headerlink" title="同步容器类"></a>同步容器类</h3><ul>
-<li>状态封装,共有方法使用 Synchronized 同步，一次只允许单个线程串行访问<ul>
-<li>Vector</li>
-<li>Hashtable<ul>
-<li>线程安全,不代表使用的时候就安全,单个方法进行了同步,但是单个安全的方法组合过程中会变得不安全</li>
-<li>单个安全的方法组合成一个逻辑,通过 Java 监视器模式,将整个逻辑变成一个原子超做，实现同步</li>
-<li>同步容器类是支持客户端加锁的。(使用同步容器类的监视器)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>迭代器和ConcurrentModificationException<ul>
-<li>及时失败的策略</li>
-<li>hasNext（）/next() 抛出 ConcurrentModificationException 异常<ul>
-<li>注意隐式的迭代器<ul>
-<li>toString()</li>
-<li>hashCode()</li>
-<li>equal()</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="并发容器类"><a href="#并发容器类" class="headerlink" title="并发容器类"></a>并发容器类</h3><ul>
-<li><p>多个线程并发访问</p>
-<ul>
-<li>ConcurrentHashMap<ul>
-<li>使用分段锁(Lock Striping)</li>
-<li>迭代器具有弱一致性(Weak Consistent)，并非即使失效</li>
-<li>size(),isEmpty()返回的计算结果可能是一个过期的值</li>
-<li>不能通过加锁来独占,一些需要原子操作的逻辑已经通过内置的方法提供<ul>
-<li>putIfAbsent()</li>
-<li>removeIfEqual()</li>
-<li>remove()</li>
-<li>replace()</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>CopyOnWriteArrayList</li>
-<li>写时复制<ul>
-<li>迭代器指向的底层的一个不可变数组</li>
-<li>读(迭代)和写(修改)线程相互不干扰</li>
-<li>当前迭代器返回的元素,不会变,不会收到写(修改)线程的干扰</li>
-</ul>
-</li>
-<li><p>ConcurrentLinkedQueue</p>
-</li>
-<li><p>BlocingQueue</p>
-</li>
-<li><p>阻塞队列</p>
-<ul>
-<li>读取时,空则阻塞</li>
-<li>写入时,满则阻塞<ul>
-<li>LinkedBlockingQueue</li>
-<li>ArrayBlockingQueue</li>
-<li>PriorityBlockingQueue</li>
-<li><h2 id="todo-SynchronousQueue"><a href="#todo-SynchronousQueue" class="headerlink" title="todo SynchronousQueue"></a>todo SynchronousQueue</h2></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>BlockingDeque</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="同步工具类"><a href="#同步工具类" class="headerlink" title="同步工具类"></a>同步工具类</h3><p> -</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/18/effective-java学习笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/18/effective-java学习笔记/" itemprop="url">
-                  effective-java笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-18T00:54:19+08:00">
-                2017-04-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="类的构造"><a href="#类的构造" class="headerlink" title="类的构造"></a>类的构造</h2><h3 id="Java中类的构造"><a href="#Java中类的构造" class="headerlink" title="Java中类的构造"></a>Java中类的构造</h3><h4 id="构造函数"><a href="#构造函数" class="headerlink" title="- 构造函数"></a>- 构造函数</h4><ul>
-<li>构造方法生成类的实例，是最基本的方法。</li>
-<li>当构造器参数较多时 ：<ul>
-<li>a: 提供默认的参数，防止用户输入的数据不对,造成对象生成的不完整<ul>
-<li>提供多个构造器,每一个都在前一个构造器的基础上减少一个默认参数值。</li>
-</ul>
-</li>
-<li>b：使用构造器来传入参数,强制用户完整输入(或者构造器填入默认参数)来确保对象相关的属性的完整性<ul>
-<li>类的内部提供一个静态的 Builder 类,用来逐个设置相关的参数,最后通过一个静态 builder()方法生成外部相关的类的实例。</li>
-<li>其实内部的 Builder 的静态类,只是为了能够访问到被 private 控制了的外部类的构造器</li>
-</ul>
-</li>
-<li>c：最后一个,通过先生成一个空的 JavaBean 对象,然后在设置相关的属性值，这个将 JavaBean 完整性校验的逻辑交给调用方去检验了.</li>
-</ul>
-</li>
-</ul>
-<h4 id="静态工厂方法-工厂方法"><a href="#静态工厂方法-工厂方法" class="headerlink" title="- 静态工厂方法/工厂方法"></a>- 静态工厂方法/工厂方法</h4><ul>
-<li>使用工厂方法能够对构造器进行拦截(intercept)， 从而决定生成的对象。对已经生成的类进行缓存(cache), 避免了类的频繁调用</li>
-<li>使用静态工厂方法,除了以上的好处，还能从整个 app 的维度来管理类的构造,因为 static 类的生命周期与整个 app 的相同。</li>
-</ul>
-<p>Services 是一个静态工厂类,Provider 是一个包裹了 Service 的类,主要作用是作为一个实体注册到 Service 中,并且对外部提供 Service 服务类。</p>
-<h4 id="为什么需要一个-Provider-类-（item-01）"><a href="#为什么需要一个-Provider-类-（item-01）" class="headerlink" title="为什么需要一个 Provider 类?（item_01）"></a>为什么需要一个 Provider 类?（item_01）</h4><ul>
-<li>我的理解是作为一个工厂方法来控制 Service 的生成,而 Services 仅仅相当于一个类的缓存(cache),注册中心的作用.</li>
-<li>还有一点符合面向对象的领域原则，Provider 域通过其它上下文专门用来提供 Service 服务的,而 Serivece 仅仅是作为一个 JavaBean 的对象，不具备任何上下文。</li>
-</ul>
-<h4 id="单例的生成"><a href="#单例的生成" class="headerlink" title="单例的生成"></a>单例的生成</h4><ul>
-<li>直接通过类中的共有方法,访问类加载时生成的实例</li>
-<li>通过类对外提供的方法，访问类加载时候生成的实例，相比上一层多了一层抽象</li>
-<li>通过枚举值来构造单例。<ul>
-<li>enum 是一个特殊的 class，其构造函数只有在构造枚举值的时候才会调用,并且是私有的;其枚举值是 public static final 的类型，是属于 class的范围，而非实例;<br>-综上:使用枚举值来构造单例的意思是：对于一个 enum 类的某个 enum value(enum 和 enumValue 是一对多的关系)，其构造函数是自动调用，生成一个实例,外界也无法重新调用生成新的值的， 这样就生成了一个单例了。</li>
-</ul>
-</li>
-</ul>
-<h4 id="避免无意义的类的构造"><a href="#避免无意义的类的构造" class="headerlink" title="避免无意义的类的构造"></a>避免无意义的类的构造</h4><ul>
-<li>频繁的类的构造,主要是发生在局部变量的构造中</li>
-<li>对于 class 中通用的对象,可以将其作用域通过关键字 static 提升到 class 中，在各个对象中共享</li>
-<li>java 中除了基本值外,一切皆对象,long(value) 和 Long(Object) 是不同的。  </li>
-</ul>
-<h2 id="类中通用的方法"><a href="#类中通用的方法" class="headerlink" title="类中通用的方法"></a>类中通用的方法</h2><ul>
-<li>equal()<ul>
-<li>最好不要覆盖 equal() 方法</li>
-<li>equal() 表示的是对象的相等,即内存地址相等,而非 value 值相等</li>
-</ul>
-</li>
-<li>hashCode()<ul>
-<li>hashCOde 是以对象内存地址的值为参数计算出来,这样能够保证任意一个对象的 hashCode 的值不相等,这样能够同 hashCode 的值做索引,快速找到对象（eg：hashMap）。</li>
-<li>既然hashCode与内存地址相关,那么就与 equal()方法相关</li>
-<li>覆盖 equal() 的同时,一定要覆盖 hashCode (item_09)<ul>
-<li>可能出现的情况是 equal() 相等,但是 hashCode 不相等,这样通过索引找对象时,会出现找不到的情况。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>clone()<ul>
-<li>Cloneable::clone()</li>
-<li>注意区分深copy(对象的复制)和浅copy(值的复制)<ul>
-<li>Cloneable::clone() 接口仅仅执行的浅copy,当自定义的Object包含基本数据类型和其它对象类型时,clone()时需要注意：super.clone() 只是负责浅 copy,其它对象类型需要根据需求进行手动的 copy。</li>
-<li>从某种程度上,可以理解,Cloneable::clone() 只能进行浅copy，应为不知道你自己的定义的对象类型，就像c++的,拷贝构造函数一样,默认的仅仅执行的浅 copy</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Comparable 接口<ul>
-<li>Comparable::compareTo() 最主要是和范型算法配合使用</li>
-<li>排序算法(eg:sort())会根据compareTo()的结果来进行排序,决定前后两个元素。<ul>
-<li>返回 1,在 sort() 的角度看上去是 left &lt; right</li>
-<li>返回-1,在 sort() 的角度看上去是 left &gt; right</li>
-<li>返回 0,在 sort() 的角度看上去是 left == right</li>
-<li>sort() 总是按照升序来排序，想要实现 left &lt; right，所以我们可以决定整个排序的顺序</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="范型"><a href="#范型" class="headerlink" title="范型"></a>范型</h2><ul>
-<li>原生范型与范型特化<ul>
-<li>范型在程序运行时,是被擦除的,任何范型都被擦除成了 Object 类型</li>
-<li>使用原生范型时(eg:set,list 等等),会跳过编译时的类型检查,在代码运行期间容易产生类型转换(cast)的异常</li>
-<li>使用参数化后的范型(eg:List<string>)，代码编译时,由类型检查,类型转换不兼容的异常会在编译器期间抛出来,而非在运行时才发现</string></li>
-</ul>
-</li>
-<li>无限制通配符与有限类型通配符  <ul>
-<li>使用通配符类型时,表明你不关心或者不知道程序具体的类型信息,而专注于一个通用的代码逻辑</li>
-<li>无限类型通配符，想较于原生类型,其仍然有类型安全的特性，因为除了 null,不能将任何元素放入到集合类型中<ul>
-<li>使用无限类型通配符时,一般是用来比较元素是否为 null.因为使用了 ? 后，只能往里面写入 null 对象了。</li>
-</ul>
-</li>
-<li>todo:无限类型通配符的引入原因  </li>
-<li>todo:有限类型通配符</li>
-</ul>
-</li>
-</ul>
-<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><ul>
-<li>枚举是一个特殊的 class，能够由自己的方法,自己的作用域</li>
-<li>枚举与普通类的区别<ul>
-<li>枚举的实例对象，不能在枚举类外,通过构造函数生成,必须在枚举类中定义生成</li>
-<li>枚举的实例对象的个数,是可控的,因为在枚举类的里面,控制了实例对象的生成</li>
-<li>枚举值(实例,对象)的名称，即实例(对象)通过构造函数生成时的，自定义的名称(字符串),同时也是在程序中通过枚举类直接引用的那个名称(eg:Color.RED，这个枚举对象的名称就是RED)</li>
-</ul>
-</li>
-<li>枚举的方法<ul>
-<li>values():返回枚举类的所有实例(对象)</li>
-<li>EnumSet.of():返回一个枚举值的集合</li>
-</ul>
-</li>
-</ul>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ul>
-<li>必要性的保护<ul>
-<li>保护性拷贝,防止出现类中属性的引用被利用<ul>
-<li>get()方法：不要将类中的属性的引用暴露出来,提供给外部的只能是属性的值(value)</li>
-<li>set()方法: 设置的只能是属性的值(value)，而不能直接将外部的引用设置到类的属性中去</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>方法重载与覆盖(@Override)<ul>
-<li>重载方法是在编译时,由编译器基于编译参数而决定的</li>
-<li>重载方法是函数名相同,参数不同</li>
-<li>方法覆盖是在运行时决定的</li>
-<li>方法覆盖函数名相同,参数不同</li>
-</ul>
-</li>
-</ul>
-<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><ul>
-<li>序列化是将一个对象编码成字节流，在不同的计算机上进行传输,能够实现跨语言之间的对象交流(反序列化)</li>
-<li>为继承而设计的类尽量不要实现 Serializable 接口<br>-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/16/GitHub的使用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/16/GitHub的使用/" itemprop="url">
-                  GitHub的使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T16:39:34+08:00">
-                2017-04-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h2><p>ssh(Secure Shell)协议主要用于互联网上计算机的远程登录，为计算机的 Shell(壳层,主要与OS的内核通讯) 层，提供安全的数据传输和使用环境。</p>
-<h4 id="安全性如何保证"><a href="#安全性如何保证" class="headerlink" title="安全性如何保证"></a>安全性如何保证</h4><ul>
-<li><h5 id="基于密码的安全验证"><a href="#基于密码的安全验证" class="headerlink" title="基于密码的安全验证"></a>基于密码的安全验证</h5><p>用户请求登录远程主机时,主机将自己的公钥发送给用户，用户的传输数据使用远程主机的公钥进行加密，只有远程主机的私钥才能解密，以此来实现数据的传输安全。</p>
-<h6 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h6><p>基于密码的验证，当网络上有人截获你的登录请求时,冒充远程主机，发送伪造的公钥给你，(不同于 https，使用的公钥是由与证书中心 CA 公证的)使用伪造的公钥加密通讯数据后,那么会截获并解析你的传输数据,再用截获的登录密码登录远程主机。</p>
-</li>
-<li><h5 id="基于密钥的安全验证"><a href="#基于密钥的安全验证" class="headerlink" title="基于密钥的安全验证"></a>基于密钥的安全验证</h5><p>既然没有证书中心 CA 确认的公钥，那么我们自己可以在我们的范围内确认某一个公钥(某个实体的身份)的正确性，那就是我们自己生成一对私钥和公钥，通过将自己生成公钥放在远程服务器端。用户请求登录过程中,远程主机为了确认用户的身份，发送一段随机的字符串,让用户用私钥加密后，回传给远程服务端,远程服务端用事先用户存储的公钥进行解密,如果成功了，就证明用户是可信的,直接允许进行登录，而不用输入密码。</p>
-<h6 id="基于密钥的安全登录，不用输入登录名和密码-那么登录时，我们是以那个身份登录的呢？"><a href="#基于密钥的安全登录，不用输入登录名和密码-那么登录时，我们是以那个身份登录的呢？" class="headerlink" title="基于密钥的安全登录，不用输入登录名和密码,那么登录时，我们是以那个身份登录的呢？"></a>基于密钥的安全登录，不用输入登录名和密码,那么登录时，我们是以那个身份登录的呢？</h6><p>生成私钥和公钥的时候，会自动将我的的身份带入进去。ssh-keygen -C “yourName@hostname.com”,如果不设置，默认就是以当前的身份生成该私钥和公钥，公钥文件的最后会有这个用户身份。注意确认唯一的身份<br>是 yourName + hostname，不要将 -C 后面的内容想象成电子邮件(email),那是你身份的标识，即:hostname 上的 yourName 用户。</p>
-</li>
-<li><h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>由于使用 ssh 协议传输的过程中,没有一个统一的公钥证书中心(CA) 来标识网络上的某个实体的身份,我们唯一能确认的就是我们自己生成的公钥,基于密钥的安全验证，实际上是由我们来验证服务端(放置了可信的公钥的实体)，而基于密码的验证方式远程服务端来验证我们,我们的登录请求可能会发往网络上的任何一台计算机,所以可能导致了冒牌远程服务端的出现(不进行任何的验证，只是希望得到我们的登录请求)。</p>
-</li>
-</ul>
-<h4 id="密钥与公钥"><a href="#密钥与公钥" class="headerlink" title="密钥与公钥"></a>密钥与公钥</h4><h2 id="github的验证"><a href="#github的验证" class="headerlink" title="github的验证"></a>github的验证</h2>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/16/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/16/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-16T00:35:49+08:00">
-                2017-04-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2260,7 +2193,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
