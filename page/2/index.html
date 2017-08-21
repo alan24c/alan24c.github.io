@@ -247,6 +247,350 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/Java并发编程的艺术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/02/Java并发编程的艺术/" itemprop="url">
+                  Java内存模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-02T23:45:08+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><h4 id="Java的内存分类"><a href="#Java的内存分类" class="headerlink" title="Java的内存分类"></a>Java的内存分类</h4><ul>
+<li>堆<ul>
+<li>所有线程共享的内存区域,也是多线程下需要同步的内存块</li>
+<li>堆上的变量,都属于引用变量(ref),单个线程中持有其引用(C中的指针)</li>
+</ul>
+</li>
+<li>栈<ul>
+<li>每个线程独享的内存区域,栈上的变量,属于值变量(value)只能当前线程访问到,无需进行同步</li>
+</ul>
+</li>
+</ul>
+<h4 id="JMM-Java-Memory-Model"><a href="#JMM-Java-Memory-Model" class="headerlink" title="JMM(Java Memory Model)"></a>JMM(Java Memory Model)</h4><p>从抽象的角度来看,JMM 定义了两层次的内存</p>
+<ul>
+<li>线程本地内存<ul>
+<li>存储该线程读/写共享变量的副本</li>
+</ul>
+</li>
+<li>主内存<ul>
+<li>存储线程之间的共享变量</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/28/Java并发工具类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/28/Java并发工具类/" itemprop="url">
+                  Java并发工具类
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-28T00:01:46+08:00">
+                2017-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h3><ul>
+<li>线程可以分为两个方面：线程运行的任务(task) 和 运行线程的实体(thread)<ul>
+<li>线程的任务实体 task<ul>
+<li>public void Runnable::run()</li>
+<li>public void Thread::run()</li>
+</ul>
+</li>
+<li>线程的构造<ul>
+<li>使用 Runnable 对象(提供 task)初始化 Thread</li>
+<li>直接继承 Thread 类,并且覆盖 run() 方法(提供 task)</li>
+</ul>
+</li>
+<li>线程的运行<ul>
+<li>public void Thread::start()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程池框架<ul>
+<li>interface:: Executor<ul>
+<li>public void Executor::execute(Runnable) 运行线程</li>
+</ul>
+</li>
+<li>构造线程池<ul>
+<li>Executor.newFixedThreadPool(threadNums) -&gt; 构造固定数目的线程，每次提交一个任务,创建一个线程,直到达到最大的线程数目</li>
+<li>Executor.newCachedThreadPool -&gt;  无限大小的线程池,会回收空闲线程</li>
+<li>Executor.newSingelThreadExecutor -&gt; 单线程数量的线程池</li>
+<li>Executor.newScheduledThreadPool -&gt; 固定长度的线程池，并且可以定时调度来执行任务</li>
+</ul>
+</li>
+<li>自定义线程池的执行方式<ul>
+<li>覆写 Executor::execute(Runnable)方法</li>
+</ul>
+</li>
+<li>interface::ExecutorService<ul>
+<li>继承 Executor，添加了一些关于 Executor 生命周期的管理方法</li>
+<li>生命周期:运行,关闭(不再接受新的任务提交),已终止(已经提交的任务已经全部运行)</li>
+<li>RejectedExecutionException 异常</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="任务的结果"><a href="#任务的结果" class="headerlink" title="任务的结果"></a>任务的结果</h3><ul>
+<li>interface::Future<ul>
+<li>表示异步计算的结果</li>
+</ul>
+</li>
+<li>Callable 与 Runnable<ul>
+<li>interface:: Callable<t><ul>
+<li>T call() throw Exception</li>
+<li>可以返回结果<br>-</li>
+</ul>
+</t></li>
+</ul>
+</li>
+</ul>
+<h3 id="工具类"><a href="#工具类" class="headerlink" title="工具类"></a>工具类</h3><ul>
+<li>interface::Lock<ul>
+<li>ReentrantLock 可重入锁<ul>
+<li><h3 id="todo-与内置锁的区别"><a href="#todo-与内置锁的区别" class="headerlink" title="todo:: 与内置锁的区别"></a>todo:: 与内置锁的区别</h3></li>
+</ul>
+</li>
+<li>轮询锁</li>
+<li>定时锁</li>
+<li>可中断锁获取操作</li>
+<li>读写锁<ul>
+<li>Lock 与 Synchronized 的区别<ul>
+<li>Synchronized 会隐示的获取锁,但是它将锁的获取和释放给固化了，没有显示获取锁和释放锁灵活</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>原子变量<ul>
+<li>处理器中实现 CAS 指令操作</li>
+<li>保证在 CAS 检查一个变量值后,设置新值过程中,另外一个线程改变了该值后,能够被感知到</li>
+<li>简单的说,就是 CAS 操作是一个被 Synchronized 保护起来的代码块</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/27/Java编程思想/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1258,7 +1602,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">Artikel</span>
               </a>
             </div>

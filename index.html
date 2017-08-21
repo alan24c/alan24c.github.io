@@ -247,6 +247,297 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/22/Condition的实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/08/22/Condition的实现/" itemprop="url">
+                  Condition的实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-22T00:45:05+08:00">
+                2017-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Condition-的使用"><a href="#Condition-的使用" class="headerlink" title="Condition 的使用"></a>Condition 的使用</h4><ul>
+<li><p>Condition 接口</p>
+<p>  实现者是 AQS::ConditionObject</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConditionObject</span> <span class="keyword">implements</span> <span class="title">Condition</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>ConditionObject 的获取</p>
+</li>
+</ul>
+<p>ReentrantLock 中通过内部的同步器(AQS) 获取 ConditionObject</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReentrantLock</span> <span class="keyword">implements</span> <span class="title">Lock</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * ReentrantLock 构造函数中构造一个非公平同步器</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ReentrantLock</span><span class="params">()</span> </span>&#123;</div><div class="line">        sync = <span class="keyword">new</span> NonfairSync();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 通过 ReenLock 中的同步器 sync 获取 ConditionObject</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> Condition <span class="title">newCondition</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> sync.newCondition();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Condition-数据结构"><a href="#Condition-数据结构" class="headerlink" title="Condition 数据结构"></a>Condition 数据结构</h4><ul>
+<li><p>等待队列节点</p>
+<p>Condition 中自身维护一个等待队列的节点:</p>
+<p>当一个线程 await() 时,将该节点放入到等待队列中去，</p>
+<p>当一个线程发出 signal() 信号时时，将等待队列中的节点转移到 AQS 中的等待队列中去,自旋等待获取锁</p>
+</li>
+</ul>
+<ul>
+<li><p>数据结构<br>头节点：Node firstWaiter</p>
+<p>尾节点：Node lastWaiter</p>
+</li>
+</ul>
+<h4 id="Condition-await"><a href="#Condition-await" class="headerlink" title="Condition::await()"></a>Condition::await()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">    <span class="keyword">if</span> (Thread.interrupted())</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException();</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 将当前调用 await() 的节点加入到 Condition 的等待队列中去</div><div class="line">     *</div><div class="line">     * 加入等待队列中去时，不需要原子(CAS)操作，此时还没有释放锁，用锁来保证原子性</div><div class="line">     */    </div><div class="line">    Node node = addConditionWaiter();</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     *  释放当前线程占用的锁</div><div class="line">     *  ReenLock 是独占锁,需要释放掉,让别的线程获取到,才能执行 signal()/signalAll() 或者 await() 的操作</div><div class="line">     */</div><div class="line">     <span class="keyword">int</span> savedState = fullyRelease(node);</div><div class="line">     <span class="keyword">int</span> interruptMode = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">      *  当当前节点任然在 Condition 的自身维护的等待队列中时(还没有被 signal 操作),</div><div class="line">      *  线程 park() 等待</div><div class="line">      */</div><div class="line">    <span class="keyword">while</span> (!isOnSyncQueue(node)) &#123;</div><div class="line">       LockSupport.park(<span class="keyword">this</span>);</div><div class="line">       <span class="keyword">if</span> ((interruptMode = checkInterruptWhileWaiting(node)) != <span class="number">0</span>)</div><div class="line">          <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 运行到这里，说明线程即将/已经被 signal 唤醒了</div><div class="line">     * 尝试去获取锁</div><div class="line">     */</div><div class="line">    <span class="keyword">if</span> (acquireQueued(node, savedState) &amp;&amp; interruptMode != THROW_IE)</div><div class="line">        interruptMode = REINTERRUPT;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (node.nextWaiter != <span class="keyword">null</span>) <span class="comment">// clean up if cancelled</span></div><div class="line">        unlinkCancelledWaiters();</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (interruptMode != <span class="number">0</span>)</div><div class="line">        reportInterruptAfterWait(interruptMode);</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="Condition-singal"><a href="#Condition-singal" class="headerlink" title="Condition::singal()"></a>Condition::singal()</h4><p>signal() 委托 doSignal() 进行操作，主要是把 Condition 维护的等待队列的节点 transfer 到 AQS 同步队列的节点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">transferForSignal</span><span class="params">(Node node)</span> </span>&#123;</div><div class="line">   <span class="comment">/*</span></div><div class="line">    * If cannot change waitStatus, the node has been cancelled.</div><div class="line">    */</div><div class="line">    <span class="keyword">if</span> (!compareAndSetWaitStatus(node, Node.CONDITION, <span class="number">0</span>))</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="comment">/*</span></div><div class="line">     * 将即将要被唤醒的 Node</div><div class="line">     * 加入到 AQS 的等待队列中去,自旋获取锁</div><div class="line">     */</div><div class="line">    Node p = enq(node);</div><div class="line">    <span class="keyword">int</span> ws = p.waitStatus;</div><div class="line">    <span class="keyword">if</span> (ws &gt; <span class="number">0</span> || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))</div><div class="line">        LockSupport.unpark(node.thread);</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">enq</span><span class="params">(<span class="keyword">final</span> Node node)</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 无限循环,直到成功的入 AQS 等待队列</div><div class="line">     */</div><div class="line">    <span class="keyword">for</span> (;;) &#123;</div><div class="line">      <span class="comment">/**</span></div><div class="line">       * tail 为 AQS 等待队列的尾节点</div><div class="line">       */  </div><div class="line">      Node t = tail;</div><div class="line">      <span class="keyword">if</span> (t == <span class="keyword">null</span>) &#123; <span class="comment">// Must initialize</span></div><div class="line">        <span class="keyword">if</span> (compareAndSetHead(<span class="keyword">new</span> Node()))</div><div class="line">           tail = head;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">           node.prev = t;</div><div class="line">           <span class="comment">/**</span></div><div class="line">            * 原子(CAS)设置尾节点</div><div class="line">            */</div><div class="line">           <span class="keyword">if</span> (compareAndSetTail(t, node)) &#123;</div><div class="line">                t.next = node;</div><div class="line">                <span class="keyword">return</span> t;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/22/Future的实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/08/22/Future的实现/" itemprop="url">
+                  Future的实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-22T00:43:05+08:00">
+                2017-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h4><h5 id="带结果的任务"><a href="#带结果的任务" class="headerlink" title="带结果的任务"></a>带结果的任务</h5><p>Callable 接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Callable</span>&lt;<span class="title">V</span>&gt;</span>&#123;</div><div class="line"></div><div class="line">    <span class="function">V <span class="title">call</span><span class="params">()</span> throw Exception</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>子类覆写 call() 接口，实现自己的任务逻辑</p>
+<h5 id="任务的提交"><a href="#任务的提交" class="headerlink" title="任务的提交"></a>任务的提交</h5><ul>
+<li><p>Callable 任务转换成 FutureTask</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">FutureTask</span> <span class="params">(Callable&lt;V&gt; callable)</span></span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>将 FutureTask 提交到线程池中运行</p>
+</li>
+<li>将 Future 对象返回给调用方,待获取结果</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AbstractExecutorService</span></span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">Future&lt;T&gt; <span class="title">submit</span><span class="params">(Callable&lt;T&gt; task)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span> (task == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line"></div><div class="line">        <span class="comment">/*</span></div><div class="line">         * step1:任务的转换</div><div class="line">         */</div><div class="line">        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);</div><div class="line"></div><div class="line">        <span class="comment">/*</span></div><div class="line">         * step2:</div><div class="line">         * 子类覆写 execute() 方法</div><div class="line">         * 提交到线程池(另外一个线程)中真正运行</div><div class="line">         */</div><div class="line">        execute(ftask);</div><div class="line"></div><div class="line">        <span class="comment">/*</span></div><div class="line">         * step3:任务的转换</div><div class="line">         */</div><div class="line">        <span class="keyword">return</span> ftask;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="等待任务结果"><a href="#等待任务结果" class="headerlink" title="等待任务结果"></a>等待任务结果</h5><ul>
+<li>FutureTask 对象<ul>
+<li>waiters : WaitNode</li>
+<li>waitersOffset : long // FutureTask 对象中属性 waiters 的偏移地址<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>加入等待队列中,然后 park</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">awaitDone</span><span class="params">(<span class="keyword">boolean</span> timed, <span class="keyword">long</span> nanos)</span></span></div><div class="line">        <span class="keyword">throws</span> InterruptedException &#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">long</span> deadline = timed ? System.nanoTime() + nanos : <span class="number">0L</span>;</div><div class="line">        WaitNode q = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">          * queued 表示当前节点是否已经原子加入了队列中</div><div class="line">          */</div><div class="line">        <span class="keyword">boolean</span> queued = <span class="keyword">false</span>;</div><div class="line">        <span class="comment">/**</span></div><div class="line">          * 无限循环直到当前结点 CAS 原子加入等待队列</div><div class="line">          */</div><div class="line">        <span class="keyword">for</span> (;;) &#123;</div><div class="line">            <span class="keyword">if</span> (Thread.interrupted()) &#123;</div><div class="line">                removeWaiter(q);</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">int</span> s = state;</div><div class="line">            <span class="keyword">if</span> (s &gt; COMPLETING) &#123;</div><div class="line">                <span class="keyword">if</span> (q != <span class="keyword">null</span>)</div><div class="line">                    q.thread = <span class="keyword">null</span>;</div><div class="line">                <span class="keyword">return</span> s;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s == COMPLETING) <span class="comment">// cannot time out yet</span></div><div class="line">            <span class="comment">/**</span></div><div class="line">             * 获取结果的线程让步</div><div class="line">             */</div><div class="line">                Thread.yield();</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (q == <span class="keyword">null</span>)</div><div class="line">               <span class="comment">/**</span></div><div class="line">                * 生成代表当前调用 get() 方法,意图获取结果的线程的 waitNode</div><div class="line">                */</div><div class="line">                q = <span class="keyword">new</span> WaitNode();</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!queued)</div><div class="line">               <span class="comment">/**</span></div><div class="line">                * 原子的入队列</div><div class="line">                * 没有成功， 下一次 for 循环又会原子入队列</div><div class="line">                * 成功了,下一次 for 循环就会执行 park 了</div><div class="line">                */</div><div class="line">                queued = UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, waitersOffset,</div><div class="line">                                                     q.next = waiters, q);</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (timed) &#123;</div><div class="line">                nanos = deadline - System.nanoTime();</div><div class="line">                <span class="keyword">if</span> (nanos &lt;= <span class="number">0L</span>) &#123;</div><div class="line">                    removeWaiter(q);</div><div class="line">                    <span class="keyword">return</span> state;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">/**</span></div><div class="line">                 * 超时 park  </div><div class="line">                 */</div><div class="line">                LockSupport.parkNanos(<span class="keyword">this</span>, nanos);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span></div><div class="line">                LockSupport.park(<span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h5 id="获取任务结果"><a href="#获取任务结果" class="headerlink" title="获取任务结果"></a>获取任务结果</h5><ul>
+<li>从等待队列中唤醒等待的节点</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/14/Java内存模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -685,6 +976,183 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/spring整合Mybatis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/20/spring整合Mybatis/" itemprop="url">
+                  spring整合bean
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-20T22:14:31+08:00">
+                2017-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="配置-DAO-接口-映射到具体的-xml-文件"><a href="#配置-DAO-接口-映射到具体的-xml-文件" class="headerlink" title="配置 DAO 接口,映射到具体的 xml 文件"></a>配置 DAO 接口,映射到具体的 xml 文件</h3><ul>
+<li>xml 文件中 &lt; mapper namespace = “…”&gt; &lt; /mapper&gt;标签<ul>
+<li>通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层</li>
+<li>可以认为 xml 文件是 DAO 接口的一个实现类</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> user.mapper;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDAO</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span> = <span class="string">"user.mapper.UserDAO"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span> = <span class="string">updateUser</span> <span class="attr">...</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">update</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="配置-mapper-接口-使其动态生成-bean"><a href="#配置-mapper-接口-使其动态生成-bean" class="headerlink" title="配置 mapper 接口,使其动态生成 bean"></a>配置 mapper 接口,使其动态生成 bean</h3><h5 id="生成-mapper-接口代理"><a href="#生成-mapper-接口代理" class="headerlink" title="生成 mapper 接口代理"></a>生成 mapper 接口代理</h5><p>使用 mybatis时，一般定义 mapper 接口,但是 interface 接口类型不能直接在 spring 注册为 bean,使用 @MapperScan 注解来配置 mapper 接口,生成相应的 bean</p>
+<ul>
+<li>@MapperScan(value=”…”)<ul>
+<li>使用 value 属性配置 mapper 文件的包</li>
+<li>将自动扫描 mapper 接口,生成代理注入到 Spring 中去</li>
+</ul>
+</li>
+</ul>
+<h5 id="将上述配置类生成-bean-加载到-spring-中"><a href="#将上述配置类生成-bean-加载到-spring-中" class="headerlink" title="将上述配置类生成 bean,加载到 spring 中"></a>将上述配置类生成 bean,加载到 spring 中</h5><ul>
+<li>使用组件扫描将上述配置类注入到 spring 中去</li>
+<li>@Configuration 注解</li>
+</ul>
+<h5 id="相关配置类如下"><a href="#相关配置类如下" class="headerlink" title="相关配置类如下"></a>相关配置类如下</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@MaperScan</span>(value=<span class="string">"com.mapper"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Appconfig</span></span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="spring-中的配置文件"><a href="#spring-中的配置文件" class="headerlink" title="spring 中的配置文件"></a>spring 中的配置文件</h3><h5 id="配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><a href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource" class="headerlink" title="配置数据库连接池，使用 spring 中的 DriverManagerDataSource"></a>配置数据库连接池，使用 spring 中的 DriverManagerDataSource</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driverClassName&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="配置-session-工厂"><a href="#配置-session-工厂" class="headerlink" title="配置 session 工厂"></a>配置 session 工厂</h5><p>SqlSessionFactoryBean 实现了 FactoryBean，所以最终创建的 bean 不是 SqlSessionFactoryBean 本身,e而是工厂类下 getObject() 返回的方法的结果.<br>不需要显示的使用 SqlSessionFactoryBean，相反 getObject() 返回的 session 会被注入到 MapperFactoryBean(即上述通过 @MaperScan 注解生成的 bean) 和实现了 SqlSessionDaoSupport 的 DAO 对象层去。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeAliasesPackage"</span> <span class="attr">value</span>=<span class="string">"mybatisDomain"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeHandlersPackage"</span> <span class="attr">value</span>=<span class="string">"typehandlers"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperLocations"</span> <span class="attr">value</span>=<span class="string">"classpath*:mappers/*.xml"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>指定 XML mapper 文件的位置<ul>
+<li>在 sqlSessionFactory 中通过属性 mapperLocations 来指定</li>
+<li>在 MyBatis 配置文件中通过 <mappers> 标签来指定.</mappers></li>
+</ul>
+</li>
+</ul>
+<h5 id="配置-session-模板"><a href="#配置-session-模板" class="headerlink" title="配置 session 模板"></a>配置 session 模板</h5><p>使用 SqlSessionFactoryBean 来生成 session 模板<br>通过往 SqlSessionTemplate 中的构造函数中，传入(第一个参数位置)sqlSessionFactory，来生成 sqlSession</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span> = <span class="string">"sqlSession"</span> <span class="attr">class</span> = <span class="string">"org.mybatis.spring.SqlSessionTemplate"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span> = <span class="string">"0"</span>,<span class="attr">ref</span> = <span class="string">"sqlSessionFactory"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<h5 id="使用-session-模板来完数据库操作"><a href="#使用-session-模板来完数据库操作" class="headerlink" title="使用 session 模板来完数据库操作"></a>使用 session 模板来完数据库操作</h5><ul>
+<li><p>隐式使用</p>
+<ul>
+<li>当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</li>
+</ul>
+</li>
+<li><p>显示使用</p>
+</li>
+</ul>
+<h6 id="显示注入-DAO-层"><a href="#显示注入-DAO-层" class="headerlink" title="显示注入 DAO 层"></a>显示注入 DAO 层</h6><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.sample.dao.UserDaoImpl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSession"</span> <span class="attr">ref</span>=<span class="string">"sqlSession"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<h6 id="显示调用-sqlSession"><a href="#显示调用-sqlSession" class="headerlink" title="显示调用 sqlSession"></a>显示调用 sqlSession</h6><pre><code class="java"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span> </span>{
+
+  <span class="keyword">private</span> SqlSession sqlSession;
+
+  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSqlSession</span><span class="params">(SqlSession sqlSession)</span> </span>{
+    <span class="keyword">this</span>.sqlSession = sqlSession;
+  }
+
+  <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(String userId)</span> </span>{
+    <span class="keyword">return</span> (User) sqlSession.selectOne(<span class="string">"org.mybatis.spring.sample.mapper.UserMapper.getUser"</span>, userId);
+  }
+}
+</code></pre>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/spring整合bean/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -838,7 +1306,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/spring整合Mybatis/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/Mysql中的锁/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -860,8 +1328,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/05/20/spring整合Mybatis/" itemprop="url">
-                  spring整合bean
+                <a class="post-title-link" href="/2017/05/19/Mysql中的锁/" itemprop="url">
+                  Mysql中的事务
                 </a>
               
             
@@ -877,8 +1345,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-20T22:14:31+08:00">
-                2017-05-20
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-19T23:02:32+08:00">
+                2017-05-19
               </time>
             
 
@@ -915,63 +1383,69 @@
       
         
           
-            <h3 id="配置-DAO-接口-映射到具体的-xml-文件"><a href="#配置-DAO-接口-映射到具体的-xml-文件" class="headerlink" title="配置 DAO 接口,映射到具体的 xml 文件"></a>配置 DAO 接口,映射到具体的 xml 文件</h3><ul>
-<li>xml 文件中 &lt; mapper namespace = “…”&gt; &lt; /mapper&gt;标签<ul>
-<li>通过上述标签映射当前的动态 sql 到 java 代码中的 DAO 接口层</li>
-<li>可以认为 xml 文件是 DAO 接口的一个实现类</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> user.mapper;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDAO</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">updateUser</span><span class="params">(User user)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span> = <span class="string">"user.mapper.UserDAO"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span> = <span class="string">updateUser</span> <span class="attr">...</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">update</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></div></pre></td></tr></table></figure>
-<h3 id="配置-mapper-接口-使其动态生成-bean"><a href="#配置-mapper-接口-使其动态生成-bean" class="headerlink" title="配置 mapper 接口,使其动态生成 bean"></a>配置 mapper 接口,使其动态生成 bean</h3><h5 id="生成-mapper-接口代理"><a href="#生成-mapper-接口代理" class="headerlink" title="生成 mapper 接口代理"></a>生成 mapper 接口代理</h5><p>使用 mybatis时，一般定义 mapper 接口,但是 interface 接口类型不能直接在 spring 注册为 bean,使用 @MapperScan 注解来配置 mapper 接口,生成相应的 bean</p>
+            <h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>什么是事务？</p>
 <ul>
-<li>@MapperScan(value=”…”)<ul>
-<li>使用 value 属性配置 mapper 文件的包</li>
-<li>将自动扫描 mapper 接口,生成代理注入到 Spring 中去</li>
+<li>事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。</li>
 </ul>
-</li>
-</ul>
-<h5 id="将上述配置类生成-bean-加载到-spring-中"><a href="#将上述配置类生成-bean-加载到-spring-中" class="headerlink" title="将上述配置类生成 bean,加载到 spring 中"></a>将上述配置类生成 bean,加载到 spring 中</h5><ul>
-<li>使用组件扫描将上述配置类注入到 spring 中去</li>
-<li>@Configuration 注解</li>
-</ul>
-<h5 id="相关配置类如下"><a href="#相关配置类如下" class="headerlink" title="相关配置类如下"></a>相关配置类如下</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@MaperScan</span>(value=<span class="string">"com.mapper"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Appconfig</span></span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="spring-中的配置文件"><a href="#spring-中的配置文件" class="headerlink" title="spring 中的配置文件"></a>spring 中的配置文件</h3><h5 id="配置数据库连接池，使用-spring-中的-DriverManagerDataSource"><a href="#配置数据库连接池，使用-spring-中的-DriverManagerDataSource" class="headerlink" title="配置数据库连接池，使用 spring 中的 DriverManagerDataSource"></a>配置数据库连接池，使用 spring 中的 DriverManagerDataSource</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driverClassName&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
-<h5 id="配置-session-工厂"><a href="#配置-session-工厂" class="headerlink" title="配置 session 工厂"></a>配置 session 工厂</h5><p>SqlSessionFactoryBean 实现了 FactoryBean，所以最终创建的 bean 不是 SqlSessionFactoryBean 本身,e而是工厂类下 getObject() 返回的方法的结果.<br>不需要显示的使用 SqlSessionFactoryBean，相反 getObject() 返回的 session 会被注入到 MapperFactoryBean(即上述通过 @MaperScan 注解生成的 bean) 和实现了 SqlSessionDaoSupport 的 DAO 对象层去。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeAliasesPackage"</span> <span class="attr">value</span>=<span class="string">"mybatisDomain"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"typeHandlersPackage"</span> <span class="attr">value</span>=<span class="string">"typehandlers"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperLocations"</span> <span class="attr">value</span>=<span class="string">"classpath*:mappers/*.xml"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>事务的ACID特性</p>
 <ul>
-<li>指定 XML mapper 文件的位置<ul>
-<li>在 sqlSessionFactory 中通过属性 mapperLocations 来指定</li>
-<li>在 MyBatis 配置文件中通过 <mappers> 标签来指定.</mappers></li>
+<li>A：Atomic，原子性  </li>
+<li>C：Consistency,一致性</li>
+<li>I：Isolation,隔离性</li>
+<li>D：Durability,持久性</li>
+</ul>
+<p>事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sql 语句要么全部执行成功,若事务中有一条语句执行失败,则全部回滚，保证事务的原子性;同时保证了数据库中数据的一致性,不会出现事务进行过程中的一个中间状态;commit(提交)后的事务,则永久存储在数据库中了，即持久性。</p>
+<h5 id="事务的一致性"><a href="#事务的一致性" class="headerlink" title="事务的一致性"></a>事务的一致性</h5><ul>
+<li>事务的隔离级别<ul>
+<li>read uncommitted<ul>
+<li>并发情况下,所有的事务都能看到其它事务未提交的结果</li>
+</ul>
+</li>
+<li>read committed<ul>
+<li>并发情况下,所有的事务只能看到其它事务以提交的结果</li>
+<li>这种隔离级别下会出现不可重复读的现象,即,并发情况下,由于其它事务提交了数据的变更，造成了同一个事务,多次读取相同数据时,可能会得到不一样的结果。这违反了事务的隔离性。</li>
+</ul>
+</li>
+<li>repeatable read (mysql 默认的隔离级别)<ul>
+<li>并发情况下,同一个事务中，多次读取相同数据时,会得到同样的结果。</li>
+</ul>
+</li>
+<li>serializable<ul>
+<li>串行化读,对数据没有竞争关系</li>
 </ul>
 </li>
 </ul>
-<h5 id="配置-session-模板"><a href="#配置-session-模板" class="headerlink" title="配置 session 模板"></a>配置 session 模板</h5><p>使用 SqlSessionFactoryBean 来生成 session 模板<br>通过往 SqlSessionTemplate 中的构造函数中，传入(第一个参数位置)sqlSessionFactory，来生成 sqlSession</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span> = <span class="string">"sqlSession"</span> <span class="attr">class</span> = <span class="string">"org.mybatis.spring.SqlSessionTemplate"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span> = <span class="string">"0"</span>,<span class="attr">ref</span> = <span class="string">"sqlSessionFactory"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
-<h5 id="使用-session-模板来完数据库操作"><a href="#使用-session-模板来完数据库操作" class="headerlink" title="使用 session 模板来完数据库操作"></a>使用 session 模板来完数据库操作</h5><ul>
-<li><p>隐式使用</p>
-<ul>
-<li>当调用 SQL 方法(Mapper DAO 接口层)时,SqlSessionTemplate 会保证使用的 session 是和当前 Spring 事务相关的,此外，它管理 session 的生命周期,包括必要的关闭,提交和回归</li>
-</ul>
-</li>
-<li><p>显示使用</p>
 </li>
 </ul>
-<h6 id="显示注入-DAO-层"><a href="#显示注入-DAO-层" class="headerlink" title="显示注入 DAO 层"></a>显示注入 DAO 层</h6><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.sample.dao.UserDaoImpl"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSession"</span> <span class="attr">ref</span>=<span class="string">"sqlSession"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
-<h6 id="显示调用-sqlSession"><a href="#显示调用-sqlSession" class="headerlink" title="显示调用 sqlSession"></a>显示调用 sqlSession</h6><pre><code class="java"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span> </span>{
-
-  <span class="keyword">private</span> SqlSession sqlSession;
-
-  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSqlSession</span><span class="params">(SqlSession sqlSession)</span> </span>{
-    <span class="keyword">this</span>.sqlSession = sqlSession;
-  }
-
-  <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(String userId)</span> </span>{
-    <span class="keyword">return</span> (User) sqlSession.selectOne(<span class="string">"org.mybatis.spring.sample.mapper.UserMapper.getUser"</span>, userId);
-  }
-}
-</code></pre>
+<h5 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h5><ul>
+<li>使用 MVCC(多版本并发控制)来解决并发条件下,读数据时，不采用等待写锁释放的条件下,对读与写操作的控制<ul>
+<li>如果读的某行数据正在被更改,那么该读取操作不会等待该行上锁的释放，而是去读取行的一个快照(snap)信息。</li>
+<li>快照版本的选取<ul>
+<li>read committed 隔离级别下，选取锁定行的最新的一个快照信息  –&gt; 不可重复读的现象</li>
+<li>repeatable read 隔离级别下,选取锁定行的事务开始前的行的版本信息 –&gt; 可重复读</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="一致性锁定读"><a href="#一致性锁定读" class="headerlink" title="一致性锁定读"></a>一致性锁定读</h5><ul>
+<li>读取数据时,显示对数据库进行加锁,用以保证数据逻辑的一致性<ul>
+<li>行锁的3种算法<ul>
+<li>Record Lock :单行上锁</li>
+<li>Gap Lock: 间隙锁</li>
+<li>Next-key Lock (Record Lock + Gap Lock)<ul>
+<li>使用 Next-key Lock 解决幻读现象：同一事务下,连续两次同样的SQL语句,可能导致不同的结果,第二次的 SQL 可能会返回之前不存在的行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="幻读，可-不可重复读"><a href="#幻读，可-不可重复读" class="headerlink" title="幻读，可/不可重复读"></a>幻读，可/不可重复读</h5><ul>
+<li>幻读：整个表结构而言,整个表结构可能在某个事务进行过程中被更改(数据行的增/删)</li>
+<li>可/不可重复读: 对单行数据而言,读取的单行数据的快照版本信息的不同</li>
+</ul>
 
           
         
@@ -1224,189 +1698,6 @@
 <li><p>使用 Next-key Lock 解决幻读现象：同一事务下,连续两次同样的SQL语句,可能导致不同的结果,第二次的 SQL 可能会返回之前不存在的行。</p>
 <p>这种情况主要发生在辅助索引上,因为在辅助索引上，不加锁时允许运行时擦入相同的值。而聚集索引是被单行锁定的，同时聚集索引上不会允许擦入相同的值的，这是数据库的一致性，保证聚集索引的唯一性，同时保证不会产生幻读现象。</p>
 </li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h5 id="幻读，可-不可重复读"><a href="#幻读，可-不可重复读" class="headerlink" title="幻读，可/不可重复读"></a>幻读，可/不可重复读</h5><ul>
-<li>幻读：整个表结构而言,整个表结构可能在某个事务进行过程中被更改(数据行的增/删)</li>
-<li>可/不可重复读: 对单行数据而言,读取的单行数据的快照版本信息的不同</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/Mysql中的锁/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/19/Mysql中的锁/" itemprop="url">
-                  Mysql中的事务
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-19T23:02:32+08:00">
-                2017-05-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>什么是事务？</p>
-<ul>
-<li>事务是 mysql 执行的一系列 sql语句,可以只包含一条 sql 语句,也可以包含多条复杂的语句。是访问更新数据库中数据项的一个执行单元。</li>
-</ul>
-<p>事务的ACID特性</p>
-<ul>
-<li>A：Atomic，原子性  </li>
-<li>C：Consistency,一致性</li>
-<li>I：Isolation,隔离性</li>
-<li>D：Durability,持久性</li>
-</ul>
-<p>事务的commit(提交)和rollback(回滚)来保证,一个事务中的 sql 语句要么全部执行成功,若事务中有一条语句执行失败,则全部回滚，保证事务的原子性;同时保证了数据库中数据的一致性,不会出现事务进行过程中的一个中间状态;commit(提交)后的事务,则永久存储在数据库中了，即持久性。</p>
-<h5 id="事务的一致性"><a href="#事务的一致性" class="headerlink" title="事务的一致性"></a>事务的一致性</h5><ul>
-<li>事务的隔离级别<ul>
-<li>read uncommitted<ul>
-<li>并发情况下,所有的事务都能看到其它事务未提交的结果</li>
-</ul>
-</li>
-<li>read committed<ul>
-<li>并发情况下,所有的事务只能看到其它事务以提交的结果</li>
-<li>这种隔离级别下会出现不可重复读的现象,即,并发情况下,由于其它事务提交了数据的变更，造成了同一个事务,多次读取相同数据时,可能会得到不一样的结果。这违反了事务的隔离性。</li>
-</ul>
-</li>
-<li>repeatable read (mysql 默认的隔离级别)<ul>
-<li>并发情况下,同一个事务中，多次读取相同数据时,会得到同样的结果。</li>
-</ul>
-</li>
-<li>serializable<ul>
-<li>串行化读,对数据没有竞争关系</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h5 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h5><ul>
-<li>使用 MVCC(多版本并发控制)来解决并发条件下,读数据时，不采用等待写锁释放的条件下,对读与写操作的控制<ul>
-<li>如果读的某行数据正在被更改,那么该读取操作不会等待该行上锁的释放，而是去读取行的一个快照(snap)信息。</li>
-<li>快照版本的选取<ul>
-<li>read committed 隔离级别下，选取锁定行的最新的一个快照信息  –&gt; 不可重复读的现象</li>
-<li>repeatable read 隔离级别下,选取锁定行的事务开始前的行的版本信息 –&gt; 可重复读</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h5 id="一致性锁定读"><a href="#一致性锁定读" class="headerlink" title="一致性锁定读"></a>一致性锁定读</h5><ul>
-<li>读取数据时,显示对数据库进行加锁,用以保证数据逻辑的一致性<ul>
-<li>行锁的3种算法<ul>
-<li>Record Lock :单行上锁</li>
-<li>Gap Lock: 间隙锁</li>
-<li>Next-key Lock (Record Lock + Gap Lock)<ul>
-<li>使用 Next-key Lock 解决幻读现象：同一事务下,连续两次同样的SQL语句,可能导致不同的结果,第二次的 SQL 可能会返回之前不存在的行。</li>
 </ul>
 </li>
 </ul>
@@ -1800,350 +2091,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/Java并发编程的艺术/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/02/Java并发编程的艺术/" itemprop="url">
-                  Java内存模型
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-02T23:45:08+08:00">
-                2017-05-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><h4 id="Java的内存分类"><a href="#Java的内存分类" class="headerlink" title="Java的内存分类"></a>Java的内存分类</h4><ul>
-<li>堆<ul>
-<li>所有线程共享的内存区域,也是多线程下需要同步的内存块</li>
-<li>堆上的变量,都属于引用变量(ref),单个线程中持有其引用(C中的指针)</li>
-</ul>
-</li>
-<li>栈<ul>
-<li>每个线程独享的内存区域,栈上的变量,属于值变量(value)只能当前线程访问到,无需进行同步</li>
-</ul>
-</li>
-</ul>
-<h4 id="JMM-Java-Memory-Model"><a href="#JMM-Java-Memory-Model" class="headerlink" title="JMM(Java Memory Model)"></a>JMM(Java Memory Model)</h4><p>从抽象的角度来看,JMM 定义了两层次的内存</p>
-<ul>
-<li>线程本地内存<ul>
-<li>存储该线程读/写共享变量的副本</li>
-</ul>
-</li>
-<li>主内存<ul>
-<li>存储线程之间的共享变量</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/28/Java并发工具类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/28/Java并发工具类/" itemprop="url">
-                  Java并发工具类
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-28T00:01:46+08:00">
-                2017-04-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h3><ul>
-<li>线程可以分为两个方面：线程运行的任务(task) 和 运行线程的实体(thread)<ul>
-<li>线程的任务实体 task<ul>
-<li>public void Runnable::run()</li>
-<li>public void Thread::run()</li>
-</ul>
-</li>
-<li>线程的构造<ul>
-<li>使用 Runnable 对象(提供 task)初始化 Thread</li>
-<li>直接继承 Thread 类,并且覆盖 run() 方法(提供 task)</li>
-</ul>
-</li>
-<li>线程的运行<ul>
-<li>public void Thread::start()</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>线程池框架<ul>
-<li>interface:: Executor<ul>
-<li>public void Executor::execute(Runnable) 运行线程</li>
-</ul>
-</li>
-<li>构造线程池<ul>
-<li>Executor.newFixedThreadPool(threadNums) -&gt; 构造固定数目的线程，每次提交一个任务,创建一个线程,直到达到最大的线程数目</li>
-<li>Executor.newCachedThreadPool -&gt;  无限大小的线程池,会回收空闲线程</li>
-<li>Executor.newSingelThreadExecutor -&gt; 单线程数量的线程池</li>
-<li>Executor.newScheduledThreadPool -&gt; 固定长度的线程池，并且可以定时调度来执行任务</li>
-</ul>
-</li>
-<li>自定义线程池的执行方式<ul>
-<li>覆写 Executor::execute(Runnable)方法</li>
-</ul>
-</li>
-<li>interface::ExecutorService<ul>
-<li>继承 Executor，添加了一些关于 Executor 生命周期的管理方法</li>
-<li>生命周期:运行,关闭(不再接受新的任务提交),已终止(已经提交的任务已经全部运行)</li>
-<li>RejectedExecutionException 异常</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="任务的结果"><a href="#任务的结果" class="headerlink" title="任务的结果"></a>任务的结果</h3><ul>
-<li>interface::Future<ul>
-<li>表示异步计算的结果</li>
-</ul>
-</li>
-<li>Callable 与 Runnable<ul>
-<li>interface:: Callable<t><ul>
-<li>T call() throw Exception</li>
-<li>可以返回结果<br>-</li>
-</ul>
-</t></li>
-</ul>
-</li>
-</ul>
-<h3 id="工具类"><a href="#工具类" class="headerlink" title="工具类"></a>工具类</h3><ul>
-<li>interface::Lock<ul>
-<li>ReentrantLock 可重入锁<ul>
-<li><h3 id="todo-与内置锁的区别"><a href="#todo-与内置锁的区别" class="headerlink" title="todo:: 与内置锁的区别"></a>todo:: 与内置锁的区别</h3></li>
-</ul>
-</li>
-<li>轮询锁</li>
-<li>定时锁</li>
-<li>可中断锁获取操作</li>
-<li>读写锁<ul>
-<li>Lock 与 Synchronized 的区别<ul>
-<li>Synchronized 会隐示的获取锁,但是它将锁的获取和释放给固化了，没有显示获取锁和释放锁灵活</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>原子变量<ul>
-<li>处理器中实现 CAS 指令操作</li>
-<li>保证在 CAS 检查一个变量值后,设置新值过程中,另外一个线程改变了该值后,能够被感知到</li>
-<li>简单的说,就是 CAS 操作是一个被 Synchronized 保护起来的代码块</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2193,7 +2140,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
